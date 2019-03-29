@@ -1,3 +1,3 @@
 
 
-window.addEventListener('load', function() { alert('load2'); }, false);
+// window.addEventListener('load', function() { alert('load2'); }, false);
