@@ -398,39 +398,51 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><canvas border="1">noooo~</canvas><br><!-- <script src="/js/script.js"></script> --><br><!-- <script src="/js/canvas.js"></script> --></p>
-<p><label>dashLong<input value="8" oninput="update()" id="dashLong" name="dashLong" type="range" min="1" max="100" step="1"></label></p>
-<p><label>dashSpacing<input value="4" oninput="update()" id="dashSpacing" name="dashSpacing" type="range" min="1" max="100" step="1"></label></p>
-<p><label>speed<input value="16" oninput="update()" id="speed" name="speed" type="range" min="1" max="1000" step="1"></label></p>
+        <p><canvas border="1">noooo~</canvas></p>
+<p><label>dashLong<input value="8" id="dashLong" name="dashLong" type="range" min="1" max="100" step="1"></label></p>
+<p><label>dashSpacing<input value="4" id="dashSpacing" name="dashSpacing" type="range" min="1" max="100" step="1"></label></p>
+<p><label>speed<input value="16" id="speed" name="speed" type="range" min="1" max="1000" step="1"></label></p>
 <script>
-var canvas = document.querySelector('canvas');
-var ctx = canvas.getContext('2d');
-var width = 200, lineWidth = 3;
-canvas.height = canvas.width = width + lineWidth;
-var dashLong = 8, dashSpacing = 4, dashOffset = 0, speed = 16;
+window.addEventListener('load', function(ev) {
+    var canvas = document.querySelector('canvas');
+    var ctx = canvas.getContext('2d');
+    var width = 200, lineWidth = 3;
+    canvas.height = canvas.width = width + lineWidth;
+    var dashLong = 8, dashSpacing = 4, dashOffset = 0, speed = 16;
 
-function update() {
-    dashLong = document.querySelector("#dashLong").value;
-    dashSpacing = document.querySelector("#dashSpacing").value;
-    speed = document.querySelector("#speed").value;
-}
+    var dlon = document.querySelector("#dashLong");
+    var dspc = document.querySelector("#dashSpacing");
+    var dspe = document.querySelector("#speed");
 
-(function draw() {
-    dashOffset++;
-    if( dashOffset >= dashLong + dashSpacing){
-        dashOffset = 0;
+    dlon.addEventListener('input', update, false);
+    dspc.addEventListener('input', update, false);
+    dspe.addEventListener('input', update, false);
+
+    function update() {
+        dashLong = dlon.value;
+        dashSpacing = dspc.value;
+        speed = dspe.value;
     }
-    ctx.setLineDash([dashLong, dashSpacing]);
-    ctx.clearRect( 0, 0, canvas.width, canvas.height);
-    ctx.lineDashOffset = -dashOffset;
-    ctx.lineWidth = lineWidth;
-    ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);
-    setTimeout(draw, 1000/speed);
-})();
+
+    (function draw() {
+        dashOffset++;
+        if( dashOffset >= dashLong + dashSpacing){
+            dashOffset = 0;
+        }
+        ctx.setLineDash([dashLong, dashSpacing]);
+        ctx.clearRect( 0, 0, canvas.width, canvas.height);
+        ctx.lineDashOffset = -dashOffset;
+        ctx.lineWidth = lineWidth;
+        ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);
+        setTimeout(draw, 1000/speed);
+    })();
+}, false);
 </script>
-
-<h2 id="yee"><a href="#yee" class="headerlink" title="yee~"></a>yee~</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(function draw() &#123;</span><br><span class="line">    dashOffset++;</span><br><span class="line">    if( dashOffset &gt;= dashLong + dashSpacing)&#123;</span><br><span class="line">        dashOffset = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    ctx.setLineDash([dashLong, dashSpacing]);</span><br><span class="line">    ctx.clearRect( 0, 0, canvas.width, canvas.height);</span><br><span class="line">    ctx.lineDashOffset = -dashOffset;</span><br><span class="line">    ctx.lineWidth = lineWidth;</span><br><span class="line">    ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);</span><br><span class="line">    setTimeout(draw, 1000/speed);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
-
+        
+          <p class="article-more-link">
+            <a href="/2019/03/29/hello-world/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
