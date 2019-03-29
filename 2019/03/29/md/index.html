@@ -36,18 +36,15 @@
 
     <main class="main">
       
-<!-- 标题 -->
-<h1>痛苦啵堪</h1>
-
-<!-- 文章列表 nooooo~ -->
-<section class="posts">
-  
-    <article class="post">
-      <div class="post-title">
-        <a class="post-title-link" href="/2019/03/29/md/">我爱黎明</a>
-      </div>
-      <div class="post-content">
-        <!-- <h3 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h3><ul>
+<article class="post">
+  <div class="post-title">
+    <h2 class="title">我爱黎明</h2>
+  </div>
+   <div class="post-meta">
+    <span class="post-time">2019-03-29</span>
+  </div>
+  <div class="post-content">
+    <h3 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h3><ul>
 <li>支持“标准”Markdown / CommonMark和Github风格的语法，也可变身为代码编辑器；</li>
 <li>支持实时预览、图片（跨域）上传、预格式文本/代码/表格插入、代码折叠、搜索替换、只读模式、自定义样式主题和多语言语法高亮等功能；</li>
 <li>支持ToC（Table of Contents）、Emoji表情、Task lists、@链接等Markdown扩展语法；</li>
@@ -315,63 +312,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">f(x) = \int_&#123;-\infty&#125;^\infty</span><br><span class="line">    \hat f(\xi)\,e^&#123;2 \pi i \xi x&#125;</span><br><span class="line">    \,d\xi</span><br></pre></td></tr></table></figure>
 <h3 id="绘制流程图-Flowchart"><a href="#绘制流程图-Flowchart" class="headerlink" title="绘制流程图 Flowchart"></a>绘制流程图 Flowchart</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">st=&gt;start: 用户登陆</span><br><span class="line">op=&gt;operation: 登陆操作</span><br><span class="line">cond=&gt;condition: 登陆成功 Yes or No?</span><br><span class="line">e=&gt;end: 进入后台</span><br><span class="line"></span><br><span class="line">st-&gt;op-&gt;cond</span><br><span class="line">cond(yes)-&gt;e</span><br><span class="line">cond(no)-&gt;op</span><br></pre></td></tr></table></figure>
 <h3 id="绘制序列图-Sequence-Diagram"><a href="#绘制序列图-Sequence-Diagram" class="headerlink" title="绘制序列图 Sequence Diagram"></a>绘制序列图 Sequence Diagram</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Andrew-&gt;China: Says Hello </span><br><span class="line">Note right of China: China thinks\nabout it </span><br><span class="line">China--&gt;Andrew: How are you? </span><br><span class="line">Andrew-&gt;&gt;China: I am good thanks!</span><br></pre></td></tr></table></figure>
-<h3 id="End"><a href="#End" class="headerlink" title="End"></a>End</h3> -->
-        
-      </div>
-      <div class="post-meta">
-        <span class="post-time">2019-03-29</span>
-      </div>
-    </article>
-  
-    <article class="post">
-      <div class="post-title">
-        <a class="post-title-link" href="/2019/03/29/hello-world/">Hello World</a>
-      </div>
-      <div class="post-content">
-        <!-- <p><canvas border="1">noooo~</canvas><br><!-- <script src="/js/script.js"></script> --><br><!-- <script src="/js/canvas.js"></script> --><p></p>
-<p><label>dashLong<input value="8" oninput="update()" id="dashLong" name="dashLong" type="range" min="1" max="100" step="1"></label></p>
-<p><label>dashSpacing<input value="4" oninput="update()" id="dashSpacing" name="dashSpacing" type="range" min="1" max="100" step="1"></label></p>
-<p><label>speed<input value="16" oninput="update()" id="speed" name="speed" type="range" min="1" max="1000" step="1"></label></p>
-<script>
-var canvas = document.querySelector('canvas');
-var ctx = canvas.getContext('2d');
-var width = 200, lineWidth = 3;
-canvas.height = canvas.width = width + lineWidth;
-var dashLong = 8, dashSpacing = 4, dashOffset = 0, speed = 16;
-
-function update() {
-    dashLong = document.querySelector("#dashLong").value;
-    dashSpacing = document.querySelector("#dashSpacing").value;
-    speed = document.querySelector("#speed").value;
-}
-
-(function draw() {
-    dashOffset++;
-    if( dashOffset >= dashLong + dashSpacing){
-        dashOffset = 0;
-    }
-    ctx.setLineDash([dashLong, dashSpacing]);
-    ctx.clearRect( 0, 0, canvas.width, canvas.height);
-    ctx.lineDashOffset = -dashOffset;
-    ctx.lineWidth = lineWidth;
-    ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);
-    setTimeout(draw, 1000/speed);
-})();
-</script>
-
-<h2 id="yee"><a href="#yee" class="headerlink" title="yee~"></a>yee~</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(function draw() &#123;</span><br><span class="line">    dashOffset++;</span><br><span class="line">    if( dashOffset &gt;= dashLong + dashSpacing)&#123;</span><br><span class="line">        dashOffset = 0;</span><br><span class="line">    &#125;</span><br><span class="line">    ctx.setLineDash([dashLong, dashSpacing]);</span><br><span class="line">    ctx.clearRect( 0, 0, canvas.width, canvas.height);</span><br><span class="line">    ctx.lineDashOffset = -dashOffset;</span><br><span class="line">    ctx.lineWidth = lineWidth;</span><br><span class="line">    ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);</span><br><span class="line">    setTimeout(draw, 1000/speed);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
- -->
-        
-      </div>
-      <div class="post-meta">
-        <span class="post-time">2019-03-29</span>
-      </div>
-    </article>
-  
-</section>
-
-<!-- 分页设置 -->
-
+<h3 id="End"><a href="#End" class="headerlink" title="End"></a>End</h3>
+  </div>
+</article>
 
     </main>
   </body>
