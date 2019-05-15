@@ -1,391 +1,349 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.8.0">
-  <meta charset="utf-8">
-  
+<head>
+    <meta charset="utf-8">
+    <title>TextingImage</title>
+    <style type="text/css">
+        ::selection {
+            color: #efefef;
+            background-color: #212121;
+        }
 
-  
-  <title>啵啵啵</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="啵啵啵,PyroHo,MyBall,my-ball">
-<meta name="keywords" content="啵啵啵,PyroHo,MyBall,my-ball">
-<meta property="og:type" content="website">
-<meta property="og:title" content="啵啵啵">
-<meta property="og:url" content="https://pyroho.github.io/index.html">
-<meta property="og:site_name" content="啵啵啵">
-<meta property="og:description" content="啵啵啵,PyroHo,MyBall,my-ball">
-<meta property="og:locale" content="default">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="啵啵啵">
-<meta name="twitter:description" content="啵啵啵,PyroHo,MyBall,my-ball">
-  
-    <link rel="alternate" href="/atom.xml" title="啵啵啵" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
+        * {
+            margin: 0;
+            padding: 0;
+            border-radius: 4px;
+        }
+
+        body {
+            display: flex;
+            background-color: #efefef;
+        }
+
+        canvas {
+            flex: 1;
+        }
+
+        .textarea-box {
+            display: flex;
+            flex: 3;
+            flex-direction: column;
+        }
+
+        textarea {
+            white-space: nowrap;
+            font-size: 16px;
+            flex: 1;
+            resize: none;
+            height: 50%;
+        }
+
+        button, label {
+            color: #333;
+            background-color: #fff;
+            display: inline-block;
+            padding: 6px 12px;
+            /*margin-bottom: 0;*/
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: .3s;
+        }
+
+        label:hover, button:hover {
+            color: #333;
+            background-color: #e6e6e6;
+            border-color: #adadad;
+        }
+
+        label input {
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        label {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        button.danger {
+            color: #fff;
+            background-color: #d9534f;
+            border-color: #d43f3a;
+        }
+
+        button.danger:hover {
+            color: #fff;
+            background-color: #c9302c;
+            border-color: #ac2925;
+        }
+
+        button.primary {
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+
+        button.primary:hover {
+            color: #fff;
+            background-color: #286090;
+            border-color: #204d74;
+        }
+    </style>
 </head>
-</html>
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">啵啵啵</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">痛啵欲生</a>
-        </h2>
-      
+<canvas>Not Support</canvas>
+<div class="textarea-box">
+    <textarea style="
+            flex: 8;
+            /*letter-spacing: -3px;*/
+            /*line-height: 18px;*/
+            font-family: Arial;">// drop image here</textarea>
+    <div>
+        <label>宽度 (px) :
+            <input oninput="update()"
+                   id="width"
+                   name="width"
+                   type="range"
+                   min="10"
+                   max="100"
+                   step="1"
+                   value="30">
+        </label>
+        <label>颜色分割阀值 :
+            <input oninput="update()"
+                   id="color"
+                   name="color"
+                   type="range"
+                   min="1"
+                   max="254"
+                   step="1"
+                   value="163">
+        </label>
+        <label>翻转字符 :
+            <input onchange="update()"
+                   id="reverse"
+                   name="reverse"
+                   type="checkbox"
+                   checked>
+        </label>
+        <label>宽度比例 :
+            <input oninput="update()"
+                   id="width-scale"
+                   name="widthScale"
+                   type="number"
+                   min="0.1"
+                   max="1"
+                   step="0.1"
+                   value="0.8">
+        </label>
+        <label>抗锯齿 :
+            <input onchange="update()"
+                   id="smoothing"
+                   name="smoothing"
+                   type="checkbox" >
+        </label>
+        <label>模式 :
+            <select onchange="update()"
+                   id="mod"
+                   name="mod" >
+               <option selected value="0">▀</option>
+               <option value="1">⠛</option>
+               <option value="2">⣿</option>
+            </select>
+        </label>
+        <label>边框 :
+            <select onchange="update()"
+                   id="srounding"
+                   name="srounding" >
+               <option selected value="0">no srounding</option>
+               <option value="1">lighten</option>
+               <option value="2">darken</option>
+            </select>
+        </label>
+        <button class="primary"
+                onclick="eval(document.querySelector('#code').value);">run!
+        </button>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://pyroho.github.io"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-哲学" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/04/03/哲学/" class="article-date">
-  <time datetime="2019-04-03T12:19:38.123Z" itemprop="datePublished">2019-04-03</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/04/03/哲学/">哲学测试 git 图片</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://raw.githubusercontent.com/PyroHo/gittest/master/img/a.gif" title="摔跤" target="_blank" rel="noopener"><img src="https://raw.githubusercontent.com/PyroHo/gittest/master/img/a.gif" alt="摔跤" title="摔跤"></a></p>
-        
-          <p class="article-more-link">
-            <a href="/2019/04/03/哲学/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pyroho.github.io/2019/04/03/哲学/" data-id="cju175v6o0000dowijcd8g201" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PyroHo/">PyroHo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/哲学/">哲学</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-痛苦啵堪" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/29/痛苦啵堪/" class="article-date">
-  <time datetime="2019-03-29T04:45:39.215Z" itemprop="datePublished">2019-03-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/29/痛苦啵堪/">痛苦啵堪</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>痛苦啵堪<br><img src="/favicon.png" alt="痛苦啵堪"><br>
-        
-          </p><p class="article-more-link">
-            <a href="/2019/03/29/痛苦啵堪/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pyroho.github.io/2019/03/29/痛苦啵堪/" data-id="cjtvvi7wm00021wwitp8jh6aw" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-md" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/29/md/" class="article-date">
-  <time datetime="2019-03-29T03:29:29.702Z" itemprop="datePublished">2019-03-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/29/md/">我爱黎明</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h3><ul>
-<li>支持“标准”Markdown / CommonMark和Github风格的语法，也可变身为代码编辑器；</li>
-<li>支持实时预览、图片（跨域）上传、预格式文本/代码/表格插入、代码折叠、搜索替换、只读模式、自定义样式主题和多语言语法高亮等功能；</li>
-<li>支持ToC（Table of Contents）、Emoji表情、Task lists、@链接等Markdown扩展语法；</li>
-<li>支持TeX科学公式（基于KaTeX）、流程图 Flowchart 和 时序图 Sequence Diagram;</li>
-<li>支持识别和解析HTML标签，并且支持自定义过滤标签解析，具有可靠的安全性和几乎无限的扩展性；</li>
-<li>支持 AMD / CMD 模块化加载（支持 Require.js &amp; Sea.js），并且支持自定义扩展插件；</li>
-<li>兼容主流的浏览器（IE8+）和Zepto.js，且支持iPad等平板设备；</li>
-<li>支持自定义主题样式；</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2019/03/29/md/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pyroho.github.io/2019/03/29/md/" data-id="cjtvvi7x600041wwicd13xvg1" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PyroHo/">PyroHo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/我爱黎明/">我爱黎明</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/29/hello-world/" class="article-date">
-  <time datetime="2019-03-28T18:31:56.244Z" itemprop="datePublished">2019-03-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/29/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><canvas id="canvas354879" border="1">noooo~</canvas></p>
-<p><label>dashLong<input value="8" id="dashLong" name="dashLong" type="range" min="1" max="100" step="1"></label></p>
-<p><label>dashSpacing<input value="4" id="dashSpacing" name="dashSpacing" type="range" min="1" max="100" step="1"></label></p>
-<p><label>speed<input value="16" id="speed" name="speed" type="range" min="1" max="1000" step="1"></label></p>
+    <textarea id="code" ondblclick="eval(this.value)">
+// width, color 0~255, isReverse, isSmoothing, widthScale 0~1, mode (0~2), srounding (0~2)
+transform( 33, 163, true, false, 0.8, 0, 0 )
+    </textarea>
+</div>
 <script>
-window.addEventListener('load', function(ev) {
-    var canvas = document.querySelector('#canvas354879');
+
+    var modes = [
+        ["░▀▄█", 1, 2],
+        ["⠁⠛⣤⣿", 1, 2],
+        ["⠁⠁⠂⠃⠄⠅⠆⠇⡀⡁⡂⡃⡄⡅⡆⡇⠈⠉⠊⠋⠌⠍⠎⠏⡈⡉⡊⡋⡌⡍⡎⡏⠐⠑⠒⠓⠔⠕⠖⠗⡐⡑⡒⡓⡔⡕⡖⡗⠘⠙⠚⠛⠜⠝⠞⠟⡘⡙⡚⡛⡜⡝⡞⡟⠠⠡⠢⠣⠤⠥⠦⠧⡠⡡⡢⡣⡤⡥⡦⡧⠨⠩⠪⠫⠬⠭⠮⠯⡨⡩⡪⡫⡬⡭⡮⡯⠰⠱⠲⠳⠴⠵⠶⠷⡰⡱⡲⡳⡴⡵⡶⡷⠸⠹⠺⠻⠼⠽⠾⠿⡸⡹⡺⡻⡼⡽⡾⡿⢀⢁⢂⢃⢄⢅⢆⢇⣀⣁⣂⣃⣄⣅⣆⣇⢈⢉⢊⢋⢌⢍⢎⢏⣈⣉⣊⣋⣌⣍⣎⣏⢐⢑⢒⢓⢔⢕⢖⢗⣐⣑⣒⣓⣔⣕⣖⣗⢘⢙⢚⢛⢜⢝⢞⢟⣘⣙⣚⣛⣜⣝⣞⣟⢠⢡⢢⢣⢤⢥⢦⢧⣠⣡⣢⣣⣤⣥⣦⣧⢨⢩⢪⢫⢬⢭⢮⢯⣨⣩⣪⣫⣬⣭⣮⣯⢰⢱⢲⢳⢴⢵⢶⢷⣰⣱⣲⣳⣴⣵⣶⣷⢸⢹⢺⢻⢼⢽⢾⢿⣸⣹⣺⣻⣼⣽⣾⣿",
+          2, 4],
+    ];
+
+    var canvas = document.querySelector('canvas');
+    var output = document.querySelector("textarea");
     var ctx = canvas.getContext('2d');
-    var width = 200, lineWidth = 3;
-    canvas.height = canvas.width = width + lineWidth;
-    var dashLong = 8, dashSpacing = 4, dashOffset = 0, speed = 16;
-
-    var dlon = document.querySelector("#dashLong");
-    var dspc = document.querySelector("#dashSpacing");
-    var dspe = document.querySelector("#speed");
-
-    dlon.addEventListener('input', update, false);
-    dspc.addEventListener('input', update, false);
-    dspe.addEventListener('input', update, false);
+    var SCREEN_WIDTH = canvas.width = window.innerWidth * .25,
+        SCREEN_HEIGHT = canvas.height = window.innerHeight;
 
     function update() {
-        dashLong = dlon.value;
-        dashSpacing = dspc.value;
-        speed = dspe.value;
+        var width = document.querySelector("#width").value;
+        var color = document.querySelector("#color").value;
+        var reverse = document.querySelector("#reverse").checked;
+        var widthScale = document.querySelector("#width-scale").value;
+        var smoothing = document.querySelector("#smoothing").checked;
+        var mod = document.querySelector("#mod").value;
+        var srounding = document.querySelector("#srounding").value;
+        
+        var code = document.querySelector("#code");
+        code.value = "transform( "
+            + width + ", "
+            + color + ", "
+            + reverse + ", "
+            + smoothing + ", "
+            + widthScale + ", "
+            + mod + ", "
+            + srounding + " )";
+        eval(code.value);
     }
 
-    console.log('Hello World');
+    dropAble(document.body, img2NumberArray);
 
-    (function draw() {
-        dashOffset++;
-        if( dashOffset >= dashLong + dashSpacing){
-            dashOffset = 0;
+    function dropAble(el, imgHandler) {
+        function drop(ev) {
+            ignoreDrag(ev);
+            var files = ev.dataTransfer.files;
+            //读取图片
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(files[0]);
+            img.onload = function () {
+                imgHandler({
+                    img: img,
+                    textWidth: img.width
+                });
+            };
         }
-        ctx.setLineDash([dashLong, dashSpacing]);
-        ctx.clearRect( 0, 0, canvas.width, canvas.height);
-        ctx.lineDashOffset = -dashOffset;
-        ctx.lineWidth = lineWidth;
-        ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);
-        setTimeout(draw, 1000/speed);
-    })();
-}, false);
+        function ignoreDrag(e) {
+            //因为我们在处理拖放，所以应该确保没有其他元素会取得这个事件
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        el.ondragenter = ignoreDrag;
+        el.ondragover = ignoreDrag;
+        el.ondrop = drop;
+    }
+    var img = new Image();
+
+    function img2NumberArray(options) {
+        var o = options;
+        var width = o.textWidth, height;
+        var result = [];
+        ctx.imageSmoothingEnabled = o.smoothing;
+        o.widthScale = o.widthScale || 1;
+
+        ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        height = (o.img.height / o.img.width) * width / o.widthScale;
+
+        ctx.drawImage(o.img, 0, 0, o.img.width, o.img.height, 0, 0, width, height);
+
+        var imgData = ctx.getImageData(0, 0, width, height);
+        // imgData { data: [r,g,b,a, r,g,b,a], width: int, height: int }
+        var data = imgData.data;
+        var avgColor;
+        for (var i = 0; i < data.length; i += 4) {
+            avgColor = (data[i] + data[i + 1] + data[i + 2]) / 3;
+            if (o.reverse) {
+                result.push(avgColor > o.color ? 1 : 0);
+            } else {
+                result.push(avgColor > o.color ? 0 : 1);
+            }
+            
+            data[i] = data[i+1] = data[i+2] = avgColor > o.color ? 255 : 0;
+        }
+
+       ctx.putImageData(imgData, 0, height);
+        // 在换成二维数组
+        var arr = [];
+        while (result.length > 0) {
+            arr.unshift(result.splice(-width));
+        }
+        return arr;
+    }
+
+    function transform(width, color, reverse, smoothing, widthScale, modIndex, srounding) {
+        
+        modIndex = (modIndex % modes.length) | 0;
+        srounding = (srounding % 3) | 0;
+        
+        var pxMap = img2NumberArray({
+            img: img,
+            textWidth: width || 80,
+            color: color || 127,
+            reverse: reverse || false,
+            smoothing: smoothing || false,
+            widthScale: widthScale || 1
+        });
+        
+        if(srounding !== 0) {
+            var type = srounding === 1 ? 0 : 1;
+            joinSrounding(pxMap, type);
+            console.log(srounding, srounding === '1', typeof srounding)
+        }
+        
+        var mod = modes[modIndex];
+        output.value = arr2text.apply(this, [pxMap].concat(mod));
+    }
+    
+    function joinSrounding(data, type) {
+        data.map(row => {
+            row.unshift(type);
+            row.push(type);
+        });
+        var border = [];
+        while(data[0].length > 1
+            && border.length !== data[0].length) {
+            border.push(type);
+        }
+        data.unshift(border);
+        data.push(border);
+    }
+
+    function arr2text(mappingArray, texts, column, row) {
+        var outputStr = "";
+        var arr = mappingArray;
+        for (var y = 0; y < arr.length; y += row) {
+            for (var x = 0; x < arr[y].length; x += column) {
+                // 每个 column*row 的字符格子
+                var index = "0B";
+                for (var tempCol = column; tempCol > 0; tempCol--) {
+                    for (var tempRow = row; tempRow > 0; tempRow--) {
+                        var yy = y + tempRow - 1;
+                        var xx = x + tempCol - 1;
+                        if ((typeof arr[yy]) === 'undefined' || (typeof arr[yy][xx]) === 'undefined') {
+                            index += 0;
+                            continue;
+                        }
+                        index += arr[yy][xx];
+                    }
+                }
+                outputStr += texts.charAt(index.toString(2));
+            }
+            outputStr += "\n";
+        }
+        console.log(outputStr);
+        return outputStr;
+    }
+
 </script>
-        
-          <p class="article-more-link">
-            <a href="/2019/03/29/hello-world/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://pyroho.github.io/2019/03/29/hello-world/" data-id="cjtvvi7w900001wwifuol162g" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/PyroHo/">PyroHo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/哲学/">哲学</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/我爱黎明/">我爱黎明</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/PyroHo/" style="font-size: 20px;">PyroHo</a> <a href="/tags/哲学/" style="font-size: 10px;">哲学</a> <a href="/tags/我爱黎明/" style="font-size: 10px;">我爱黎明</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2019/04/03/哲学/">哲学测试 git 图片</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/29/痛苦啵堪/">痛苦啵堪</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/29/md/">我爱黎明</a>
-          </li>
-        
-          <li>
-            <a href="/2019/03/29/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2019 PyroHo<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
-
-
-  </div>
 </body>
 </html>
