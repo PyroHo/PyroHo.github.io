@@ -1,349 +1,512 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <title>TextingImage</title>
-    <style type="text/css">
-        ::selection {
-            color: #efefef;
-            background-color: #212121;
-        }
+  <meta charset="UTF-8">
+  <title>TextReverse&Replace</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      border-radius: 4px;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            border-radius: 4px;
-        }
+    ::selection {
+      background-color: #212121;
+      color: #efefef;
+    }
 
-        body {
-            display: flex;
-            background-color: #efefef;
-        }
+    #container {
+      position: fixed;
+      display: flex;
+      width: 100%;
+      height: 100%;
+      background-color: #efefef;
+      overflow: auto;
+    }
 
-        canvas {
-            flex: 1;
-        }
+    .left,
+    .result {
+      flex: 1;
+      overflow: auto;
+    }
 
-        .textarea-box {
-            display: flex;
-            flex: 3;
-            flex-direction: column;
-        }
+    .left {
+      display: flex;
+      flex-flow: column;
+    }
 
-        textarea {
-            white-space: nowrap;
-            font-size: 16px;
-            flex: 1;
-            resize: none;
-            height: 50%;
-        }
+    .left .target,
+    .left .option {
+      flex: 1;
+    }
 
-        button, label {
-            color: #333;
-            background-color: #fff;
-            display: inline-block;
-            padding: 6px 12px;
-            /*margin-bottom: 0;*/
-            font-size: 14px;
-            font-weight: 400;
-            line-height: 1.42857143;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: middle;
-            cursor: pointer;
-            background-image: none;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            transition: .3s;
-        }
+    textarea {
+      font-size: 16px;
+      width: 99%;
+      height: 99%;
+      resize: none;
+      line-height: 19px;
+      letter-spacing: 0;
+    }
 
-        label:hover, button:hover {
-            color: #333;
-            background-color: #e6e6e6;
-            border-color: #adadad;
-        }
+    .left .option textarea {
+      width: 49%;
+      height: auto;
+      display: inline-block;
+    }
 
-        label input {
-            vertical-align: middle;
-            cursor: pointer;
-        }
+    textarea.reverse-font-color {
+      background-color: #212121;
+      color: #fefefe;
+    }
 
-        label {
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
+    textarea.text-align-right {
+      text-align: right;
+    }
 
-        button.danger {
-            color: #fff;
-            background-color: #d9534f;
-            border-color: #d43f3a;
-        }
+    button,
+    label {
+      color: #333;
+      background-color: #fff;
+      display: inline-block;
+      padding: 6px 12px;
+      /*margin-bottom: 0;*/
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.42857143;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: .3s;
+    }
 
-        button.danger:hover {
-            color: #fff;
-            background-color: #c9302c;
-            border-color: #ac2925;
-        }
+    label:hover,
+    button:hover {
+      color: #333;
+      background-color: #e6e6e6;
+      border-color: #adadad;
+    }
 
-        button.primary {
-            color: #fff;
-            background-color: #337ab7;
-            border-color: #2e6da4;
-        }
+    label input {
+      vertical-align: middle;
+      cursor: pointer;
+    }
 
-        button.primary:hover {
-            color: #fff;
-            background-color: #286090;
-            border-color: #204d74;
-        }
-    </style>
+    label {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    button.danger {
+      color: #fff;
+      background-color: #d9534f;
+      border-color: #d43f3a;
+    }
+
+    button.danger:hover {
+      color: #fff;
+      background-color: #c9302c;
+      border-color: #ac2925;
+    }
+
+    button.primary {
+      color: #fff;
+      background-color: #337ab7;
+      border-color: #2e6da4;
+    }
+
+    button.primary:hover {
+      color: #fff;
+      background-color: #286090;
+      border-color: #204d74;
+    }
+
+    input[type=text] {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      -webkit-appearance: none;
+      background-color: transparent;
+      font-size: inherit;
+      color: inherit;
+      height: 1.41176471em;
+      line-height: 1.41176471;
+    }
+  </style>
 </head>
+
 <body>
-<canvas>Not Support</canvas>
-<div class="textarea-box">
-    <textarea style="
-            flex: 8;
-            /*letter-spacing: -3px;*/
-            /*line-height: 18px;*/
-            font-family: Arial;">// drop image here</textarea>
-    <div>
-        <label>宽度 (px) :
-            <input oninput="update()"
-                   id="width"
-                   name="width"
-                   type="range"
-                   min="10"
-                   max="100"
-                   step="1"
-                   value="30">
+  <div id="container" @selectstart.prevent>
+    <div class="left">
+      <div class="target">
+        <!-- <textarea v-model="qr.on ? qrResult : source"></textarea> -->
+        <textarea v-model="source"></textarea>
+      </div>
+
+      <form class="option">
+        <label>水平翻转
+          <input type="checkbox" v-model="horizontalReverse" name="horizontalReverse" title="horizontalReverse">
         </label>
-        <label>颜色分割阀值 :
-            <input oninput="update()"
-                   id="color"
-                   name="color"
-                   type="range"
-                   min="1"
-                   max="254"
-                   step="1"
-                   value="163">
+        <label>垂直翻转
+          <input type="checkbox" v-model="verticalReverse" name="verticalReverse" title="verticalReverse">
         </label>
-        <label>翻转字符 :
-            <input onchange="update()"
-                   id="reverse"
-                   name="reverse"
-                   type="checkbox"
-                   checked>
+        <label>字体 <select v-model="style.fontFamilySelected" name="fontFamily">
+            <option v-for="f in style.fontFamily" :value="f">{{ f }}</option>
+          </select></label>
+        <label>行间距
+          <input type="range" v-model="style.lineHeight" name="lineHeight" min="10" max="28" step="1"
+            title="lineHeight">
         </label>
-        <label>宽度比例 :
-            <input oninput="update()"
-                   id="width-scale"
-                   name="widthScale"
-                   type="number"
-                   min="0.1"
-                   max="1"
-                   step="0.1"
-                   value="0.8">
+        <label>字间距
+          <input type="range" v-model="style.letterSpacing" name="letterSpacing" min="-10" max="10" step="1"
+            title="letterSpacing">
         </label>
-        <label>抗锯齿 :
-            <input onchange="update()"
-                   id="smoothing"
-                   name="smoothing"
-                   type="checkbox" >
+        <label>颜色翻转
+          <input type="checkbox" v-model="style.reverseFontColor" name="reverseFontColor" title="reverseFontColor">
         </label>
-        <label>模式 :
-            <select onchange="update()"
-                   id="mod"
-                   name="mod" >
-               <option selected value="0">▀</option>
-               <option value="1">⠛</option>
-               <option value="2">⣿</option>
-            </select>
+        <label>右对齐
+          <input type="checkbox" v-model="style.textAlignRight" name="textAlignRight" title="textAlignRight">
         </label>
-        <label>边框 :
-            <select onchange="update()"
-                   id="srounding"
-                   name="srounding" >
-               <option selected value="0">no srounding</option>
-               <option value="1">lighten</option>
-               <option value="2">darken</option>
-            </select>
+        <label>边框
+          <select v-model="borderSlected" name="border">
+            <option v-for="b,i in border" :value="i">{{ b }}</option>
+          </select>
         </label>
-        <button class="primary"
-                onclick="eval(document.querySelector('#code').value);">run!
-        </button>
+        <br>
+        <textarea title="replace" v-model="replaceCmp" name="replace" rows="7" cols="10"></textarea>
+        <textarea title="swap" v-model="swapCmp" name="swap" rows="7" cols="10"></textarea>
+        <label>替换
+          <input type="checkbox" v-model="enableReplace" name="enableReplace" title="enableReplace">
+        </label>
+        <label>交换
+          <input type="checkbox" v-model="enableSwap" name="enableSwap" title="enableSwap">
+        </label>
+
+        <!-- 二维码 --><hr>
+        <!-- <label>开启二维码转换
+          <input type="checkbox" v-model="qr.on" name="qrOn" title="qrOn">
+        </label> -->
+        <label>
+          <input type="text" v-model="qr.source" name="qrSource" title="qrSource" placeholder="要转换成二维码的字符">
+        </label>
+        <label>边框 (qr) <select v-model="qr.borderSlected" name="qrBorder" >
+            <option v-for="b,i in qr.border" :value="i">{{ b }}</option>
+        </select></label>
+        <label>字符翻转 (qr)
+          <input @input="showCode" type="checkbox" v-model="qr.reverseFont" name="reverseFont" title="reverseFont">
+        </label>
+        <button class="primary" @click.enter.stop.prevent="showCode">转换</button>
+        <div id="qrResult" style="display: none;"></div>
+      </form>
     </div>
-    <textarea id="code" ondblclick="eval(this.value)">
-// width, color 0~255, isReverse, isSmoothing, widthScale 0~1, mode (0~2), srounding (0~2)
-transform( 33, 163, true, false, 0.8, 0, 0 )
-    </textarea>
-</div>
-<script>
 
-    var modes = [
-        ["░▀▄█", 1, 2],
-        ["⠁⠛⣤⣿", 1, 2],
-        ["⠁⠁⠂⠃⠄⠅⠆⠇⡀⡁⡂⡃⡄⡅⡆⡇⠈⠉⠊⠋⠌⠍⠎⠏⡈⡉⡊⡋⡌⡍⡎⡏⠐⠑⠒⠓⠔⠕⠖⠗⡐⡑⡒⡓⡔⡕⡖⡗⠘⠙⠚⠛⠜⠝⠞⠟⡘⡙⡚⡛⡜⡝⡞⡟⠠⠡⠢⠣⠤⠥⠦⠧⡠⡡⡢⡣⡤⡥⡦⡧⠨⠩⠪⠫⠬⠭⠮⠯⡨⡩⡪⡫⡬⡭⡮⡯⠰⠱⠲⠳⠴⠵⠶⠷⡰⡱⡲⡳⡴⡵⡶⡷⠸⠹⠺⠻⠼⠽⠾⠿⡸⡹⡺⡻⡼⡽⡾⡿⢀⢁⢂⢃⢄⢅⢆⢇⣀⣁⣂⣃⣄⣅⣆⣇⢈⢉⢊⢋⢌⢍⢎⢏⣈⣉⣊⣋⣌⣍⣎⣏⢐⢑⢒⢓⢔⢕⢖⢗⣐⣑⣒⣓⣔⣕⣖⣗⢘⢙⢚⢛⢜⢝⢞⢟⣘⣙⣚⣛⣜⣝⣞⣟⢠⢡⢢⢣⢤⢥⢦⢧⣠⣡⣢⣣⣤⣥⣦⣧⢨⢩⢪⢫⢬⢭⢮⢯⣨⣩⣪⣫⣬⣭⣮⣯⢰⢱⢲⢳⢴⢵⢶⢷⣰⣱⣲⣳⣴⣵⣶⣷⢸⢹⢺⢻⢼⢽⢾⢿⣸⣹⣺⣻⣼⣽⣾⣿",
-          2, 4],
-    ];
+    <div class="result">
+      <textarea :style="textStyle" v-model="result"></textarea>
+    </div>
+  </div>
+  <script src="qrcode.js"></script>
+  <script src="vue.js"></script>
+  <script>
 
-    var canvas = document.querySelector('canvas');
-    var output = document.querySelector("textarea");
-    var ctx = canvas.getContext('2d');
-    var SCREEN_WIDTH = canvas.width = window.innerWidth * .25,
-        SCREEN_HEIGHT = canvas.height = window.innerHeight;
+    var data = {
+      "source": "\
+░░░░░░░█▐▓▓░████▄▄▄█▀▄▓▓▓▌███\n\
+░░░░░▄█▌▀▄▓▓▄▄▄▄▀▀▀▄▓▓▓▓▓▌███\n\
+░░░▄█▀▀▄▓█▓▓▓▓▓▓▓▓▓▓▓▓▀░▓▌███\n\
+░░█▀▄▓▓▓███▓▓▓███▓▓▓▄░░▄▓▐███\n\
+░█▌▓▓▓▀▀▓▓▓▓███▓▓▓▓▓▓▓▄▀▓▓▐██\n\
+▐█▐██▐░▄▓▓▓▓▓▀▄░▀▓▓▓▓▓▓▓▓▓▌██\n\
+█▌███▓▓▓▓▓▓▓▓▐░░▄▓▓███▓▓▓▄▀▐█\n\
+█▐█▓▀░░▀▓▓▓▓▓▓▓▓▓██████▓▓▓▓▐█\n\
+▌▓▄▌▀░▀░▐▀█▄▓▓██████████▓▓▓▌█\n\
+▌▓▓▓▄▄▀▀▓▓▓▀▓▓▓▓▓▓▓▓█▓█▓█▓▓▌█\n\
+█▐▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓█▓█▓█▓█▓▓▓▐█",
+      "horizontalReverse": false,
+      "verticalReverse": false,
+      "enableReplace": false,
+      "enableSwap": false,
+      "borderSlected": 0,
+      "border": ['none', 'lighten', 'darken'],
+      "replace": [['a', 'b']],
+      "swap": [["▌", "▐"], ["▀", "▄"], ["░", "█"]],
+      "style": {
+        "fontFamilySelected": 'Arial',
+        "fontFamily": [
+          'Arial',
+          'Verdana',
+          'sans-serif',
+          'monospace',
+          'initial'
+        ],
+        "reverseFontColor": true,
+        "lineHeight": 20,
+        "letterSpacing": 0,
+        "textAlignRight": false,
+      },
+      // 新增 QR 模块
+      "qr": {
+        // "on": false,
+        "reverseFont": false,
+        "borderSlected": 0,
+        "border": ['none', 'lighten', 'darken'],
+        "transformer": new QRCode(document.querySelector('#qrResult'), { width: 70, height: 70 }),
+        "source": ''
+      }
+    };
 
-    function update() {
-        var width = document.querySelector("#width").value;
-        var color = document.querySelector("#color").value;
-        var reverse = document.querySelector("#reverse").checked;
-        var widthScale = document.querySelector("#width-scale").value;
-        var smoothing = document.querySelector("#smoothing").checked;
-        var mod = document.querySelector("#mod").value;
-        var srounding = document.querySelector("#srounding").value;
-        
-        var code = document.querySelector("#code");
-        code.value = "transform( "
-            + width + ", "
-            + color + ", "
-            + reverse + ", "
-            + smoothing + ", "
-            + widthScale + ", "
-            + mod + ", "
-            + srounding + " )";
-        eval(code.value);
-    }
-
-    dropAble(document.body, img2NumberArray);
-
-    function dropAble(el, imgHandler) {
-        function drop(ev) {
-            ignoreDrag(ev);
-            var files = ev.dataTransfer.files;
-            //读取图片
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(files[0]);
-            img.onload = function () {
-                imgHandler({
-                    img: img,
-                    textWidth: img.width
-                });
-            };
-        }
-        function ignoreDrag(e) {
-            //因为我们在处理拖放，所以应该确保没有其他元素会取得这个事件
-            e.stopPropagation();
-            e.preventDefault();
-        }
-        el.ondragenter = ignoreDrag;
-        el.ondragover = ignoreDrag;
-        el.ondrop = drop;
-    }
-    var img = new Image();
-
-    function img2NumberArray(options) {
-        var o = options;
-        var width = o.textWidth, height;
-        var result = [];
-        ctx.imageSmoothingEnabled = o.smoothing;
-        o.widthScale = o.widthScale || 1;
-
-        ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-        height = (o.img.height / o.img.width) * width / o.widthScale;
-
-        ctx.drawImage(o.img, 0, 0, o.img.width, o.img.height, 0, 0, width, height);
-
-        var imgData = ctx.getImageData(0, 0, width, height);
-        // imgData { data: [r,g,b,a, r,g,b,a], width: int, height: int }
-        var data = imgData.data;
-        var avgColor;
-        for (var i = 0; i < data.length; i += 4) {
-            avgColor = (data[i] + data[i + 1] + data[i + 2]) / 3;
-            if (o.reverse) {
-                result.push(avgColor > o.color ? 1 : 0);
-            } else {
-                result.push(avgColor > o.color ? 0 : 1);
-            }
-            
-            data[i] = data[i+1] = data[i+2] = avgColor > o.color ? 255 : 0;
-        }
-
-       ctx.putImageData(imgData, 0, height);
-        // 在换成二维数组
-        var arr = [];
-        while (result.length > 0) {
-            arr.unshift(result.splice(-width));
-        }
-        return arr;
-    }
-
-    function transform(width, color, reverse, smoothing, widthScale, modIndex, srounding) {
-        
-        modIndex = (modIndex % modes.length) | 0;
-        srounding = (srounding % 3) | 0;
-        
-        var pxMap = img2NumberArray({
-            img: img,
-            textWidth: width || 80,
-            color: color || 127,
-            reverse: reverse || false,
-            smoothing: smoothing || false,
-            widthScale: widthScale || 1
+    var methods = {
+      transformText: function (text) {
+        // 替换
+        this.enableReplace && this.replace.forEach(function (item, i, array) {
+          // TODO 会产生 bug ( 少数情况下 )
+          text = text.replaceAll(item[0], item[1]);
         });
-        
-        if(srounding !== 0) {
-            var type = srounding === 1 ? 0 : 1;
-            joinSrounding(pxMap, type);
-            console.log(srounding, srounding === '1', typeof srounding)
-        }
-        
-        var mod = modes[modIndex];
-        output.value = arr2text.apply(this, [pxMap].concat(mod));
-    }
-    
-    function joinSrounding(data, type) {
-        data.map(row => {
-            row.unshift(type);
-            row.push(type);
+        // 互换
+        this.enableSwap && this.swap.forEach(function (item, i, array) {
+          // TODO 会产生 bug ( 少数情况下 )
+          text = text.swap(item[0], item[1]);
         });
+        var textArr = text.split("\n");
+        // 垂直翻转
+        this.verticalReverse && textArr.reverse();
+        // 水平翻转
+        this.horizontalReverse && textArr.forEach(function (item, i, arr) {
+          arr[i] = item.split("").reverse().join("");
+        });
+        // 边框
+        if (this.borderSlected !== 0) {
+          var type = this.borderSlected === 1 ? '░' : '█';
+          this.joinBorder(textArr, type);
+        }
+
+        return textArr.join("\n");
+      },
+      joinBorder: function (data, type) {
+        data.forEach(function(t, i, a) {
+          a[i] = type + a[i] + type;
+        });
+
         var border = [];
-        while(data[0].length > 1
-            && border.length !== data[0].length) {
-            border.push(type);
+        while (data[0].length > 1 &&
+          border.length !== data[0].length) {
+          border.push(type);
         }
+
+        data.unshift(border.join(''));
+        data.push(border.join(''));
+      },
+      joinBorderQR: function (data, type) {
+        data.map(row => {
+          row.unshift(type);
+          row.push(type);
+        });
+
+        var border = [];
+        while (data[0].length > 1 &&
+          border.length !== data[0].length) {
+          border.push(type);
+        }
+
         data.unshift(border);
         data.push(border);
-    }
-
-    function arr2text(mappingArray, texts, column, row) {
-        var outputStr = "";
-        var arr = mappingArray;
-        for (var y = 0; y < arr.length; y += row) {
-            for (var x = 0; x < arr[y].length; x += column) {
-                // 每个 column*row 的字符格子
-                var index = "0B";
-                for (var tempCol = column; tempCol > 0; tempCol--) {
-                    for (var tempRow = row; tempRow > 0; tempRow--) {
-                        var yy = y + tempRow - 1;
-                        var xx = x + tempCol - 1;
-                        if ((typeof arr[yy]) === 'undefined' || (typeof arr[yy][xx]) === 'undefined') {
-                            index += 0;
-                            continue;
-                        }
-                        index += arr[yy][xx];
-                    }
-                }
-                outputStr += texts.charAt(index.toString(2));
-            }
-            outputStr += "\n";
+      },
+      getEncodeText: function (text) {
+        this.qr.transformer.makeCode(text);
+        return this._code2Text(this.qr.transformer._oQRCode.modules, "░▀▄█", 1, 2);
+      },
+      _code2Text: function (code, texts, column, row) {
+        // 添加边框
+        if (this.qr.borderSlected !== 0) {
+          var type = this.qr.borderSlected !== 1;
+          this.joinBorderQR(code, type);
         }
+        // 字符翻转
+        var trueValue = this.qr.reverseFont ? 0 : 1;
+        var falseValue = this.qr.reverseFont ? 1 : 0;
+        // 开始转换
+        var outputStr = "";
+        for (var y = 0; y < code.length; y += row) {
+          for (var x = 0; x < code[y].length; x += column) {
+            // 每个 column*row 的字符格子
+            var index = "0B";
+            for (var tempCol = column; tempCol > 0; tempCol--) {
+              for (var tempRow = row; tempRow > 0; tempRow--) {
+                var yy = y + tempRow - 1;
+                var xx = x + tempCol - 1;
+                if ((typeof code[yy]) === 'undefined' || (typeof code[yy][xx]) === 'undefined') {
+                  index += 0;
+                  continue;
+                }
+                index += code[yy][xx] ? trueValue : falseValue;
+              }
+            }
+            outputStr += texts.charAt(index.toString(2));
+          }
+          outputStr += "\n";
+        }
+
         console.log(outputStr);
         return outputStr;
+      },
+      showCode: function () {
+        // this.replace = [];
+        // this.swap = [];
+        this.source = this.getEncodeText(this.qr.source);
+      }
+    };
+
+    var computed = {
+      replaceCmp: {
+        get: function () {
+          return JSON.stringify(this.replace, null, 0);
+        },
+        set: function (newValue) {
+          this.replace = JSON.parse(newValue) || [];
+        }
+      },
+      swapCmp: {
+        get: function () {
+          return JSON.stringify(this.swap, null, 0);
+        },
+        set: function (newValue) {
+          this.swap = JSON.parse(newValue) || [];
+        }
+      },
+      textStyle: function () {
+        var s = this.style;
+        return {
+          'background-color': s.reverseFontColor ? '#212121' : '#f8f8f8',
+          'color': s.reverseFontColor ? '#f8f8f8' : '#212121',
+          'font-family': s.fontFamilySelected,
+          'line-height': s.lineHeight + 'px',
+          'letter-spacing': s.letterSpacing + 'px',
+          'text-align': s.textAlignRight ? 'right' : 'left'
+        };
+      },
+      result: function () {
+        return this.transformText(this.source);
+      },
+      // sourceAlias: function() {
+      //   return this.qr.on ? this.qrResult : this.source;
+      // },
+      // qrResult: function () {
+      //   return this.getEncodeText(this.qr.source);
+      // }
+    };
+
+    var app = new Vue({
+      el: '#container',
+      data: data,
+      watch: {
+        'qr.borderSlected': function() { this.showCode() }
+      },
+      methods: methods,
+      computed: computed,
+      beforeCreate: initStringUtil
+    });
+
+    function initStringUtil() {
+      String.prototype.replaceAll = function (f, e) {
+        return this.split(f).join(e);
+      };
+      String.prototype.swap = function (a, b) {
+        var tmp = this.split(a);
+        for (var i = 0; i < tmp.length; i++) {
+          tmp[i] = tmp[i].split(b).join(a);
+        }
+        return tmp.join(b);
+      }
     }
 
-</script>
+
+    // UserData
+    (function (window, target, result) {
+      var UserData = {};
+      var dataKey = "89969";
+      var history = getData() || [];
+      var curIndex = history.length > 0 ? history.length - 1 : 0;
+      UserData =
+        {
+          save: function () {
+            var data = {
+              "target": target.value,
+              "result": result.value
+            };
+            history.push(data);
+            while (history.length > 200) {
+              UserData.cut(10);
+            }
+            localStorage.setItem(dataKey, JSON.stringify(history));
+            alert("saved \n total: " + history.length);
+          },
+          removeCurrent: function () {
+            if ((typeof history[curIndex]) === "undefined") {
+              alert("noooo~  \n rest: " + history.length);
+              return;
+            }
+            if (history.splice(curIndex, 1)) {
+              localStorage.setItem(dataKey, JSON.stringify(history));
+              alert("removed \n rest: " + history.length);
+            } else {
+              alert("noooo~  \n rest: " + history.length);
+            }
+          },
+          removeAll: function () {
+            history = [];
+            curIndex = 0;
+            return localStorage.removeItem(dataKey);
+          },
+          recordPrev: function () {
+            if (curIndex > 0 && history.length > 1) {
+              setData(history[--curIndex]);
+            }
+          },
+          recordNext: function () {
+            if (curIndex < history.length - 1 && history.length > 1) {
+              setData(history[++curIndex]);
+            }
+          },
+          show: function () {
+            if (history.length < 1) {
+              alert("empty set");
+              return;
+            }
+            var allReesult = "";
+            history.forEach(function (t, i, arr) {
+              allReesult += "\n<!-- Start " + i + " Start -->\n";
+              allReesult += t.result;
+              allReesult += "\n<!-- End " + i + " End -->\n";
+            });
+            result.value = allReesult;
+            alert("done~ total: " + history.length);
+          }
+        };
+      function getData() {
+        return JSON.parse(localStorage.getItem(dataKey));
+      }
+      function setData(data) {
+        target.value = data.target;
+        result.value = data.result;
+      }
+      function cut(num) {
+        num = num < 1 ? 0 : num;
+        if (history.length < 1) {
+          return;
+        }
+        while (num-- > 0) {
+          history.shift();
+        }
+      }
+      window.UserData = UserData;
+      // })(window, target, result);
+    });
+
+  </script>
 </body>
+
 </html>

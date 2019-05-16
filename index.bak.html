@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>TextingImage</title>
+    <style type="text/css">
+        ::selection {
+            color: #efefef;
+            background-color: #212121;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            border-radius: 4px;
+        }
+
+        body {
+            display: flex;
+            background-color: #efefef;
+        }
+
+        canvas {
+            flex: 1;
+        }
+
+        .textarea-box {
+            display: flex;
+            flex: 3;
+            flex-direction: column;
+        }
+
+        textarea {
+            white-space: nowrap;
+            font-size: 16px;
+            flex: 1;
+            resize: none;
+            height: 50%;
+        }
+
+        button, label {
+            color: #333;
+            background-color: #fff;
+            display: inline-block;
+            padding: 6px 12px;
+            /*margin-bottom: 0;*/
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            cursor: pointer;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: .3s;
+        }
+
+        label:hover, button:hover {
+            color: #333;
+            background-color: #e6e6e6;
+            border-color: #adadad;
+        }
+
+        label input {
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        label {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        button.danger {
+            color: #fff;
+            background-color: #d9534f;
+            border-color: #d43f3a;
+        }
+
+        button.danger:hover {
+            color: #fff;
+            background-color: #c9302c;
+            border-color: #ac2925;
+        }
+
+        button.primary {
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+
+        button.primary:hover {
+            color: #fff;
+            background-color: #286090;
+            border-color: #204d74;
+        }
+    </style>
+</head>
+<body>
+<canvas>Not Support</canvas>
+<div class="textarea-box">
+    <textarea style="
+            flex: 8;
+            /*letter-spacing: -3px;*/
+            /*line-height: 18px;*/
+            font-family: Arial;">// drop image here</textarea>
+    <div>
+        <label>宽度 (px) :
+            <input oninput="update()"
+                   id="width"
+                   name="width"
+                   type="range"
+                   min="10"
+                   max="100"
+                   step="1"
+                   value="30">
+        </label>
+        <label>颜色分割阀值 :
+            <input oninput="update()"
+                   id="color"
+                   name="color"
+                   type="range"
+                   min="1"
+                   max="254"
+                   step="1"
+                   value="163">
+        </label>
+        <label>翻转字符 :
+            <input onchange="update()"
+                   id="reverse"
+                   name="reverse"
+                   type="checkbox"
+                   checked>
+        </label>
+        <label>宽度比例 :
+            <input oninput="update()"
+                   id="width-scale"
+                   name="widthScale"
+                   type="number"
+                   min="0.1"
+                   max="1"
+                   step="0.1"
+                   value="0.8">
+        </label>
+        <label>抗锯齿 :
+            <input onchange="update()"
+                   id="smoothing"
+                   name="smoothing"
+                   type="checkbox" >
+        </label>
+        <label>模式 :
+            <select onchange="update()"
+                   id="mod"
+                   name="mod" >
+               <option selected value="0">▀</option>
+               <option value="1">⠛</option>
+               <option value="2">⣿</option>
+            </select>
+        </label>
+        <label>边框 :
+            <select onchange="update()"
+                   id="srounding"
+                   name="srounding" >
+               <option selected value="0">no srounding</option>
+               <option value="1">lighten</option>
+               <option value="2">darken</option>
+            </select>
+        </label>
+        <button class="primary"
+                onclick="eval(document.querySelector('#code').value);">run!
+        </button>
+    </div>
+    <textarea id="code" ondblclick="eval(this.value)">
+// width, color 0~255, isReverse, isSmoothing, widthScale 0~1, mode (0~2), srounding (0~2)
+transform( 33, 163, true, false, 0.8, 0, 0 )
+    </textarea>
+</div>
+<script>
+
+    var modes = [
+        ["░▀▄█", 1, 2],
+        ["⠁⠛⣤⣿", 1, 2],
+        ["⠁⠁⠂⠃⠄⠅⠆⠇⡀⡁⡂⡃⡄⡅⡆⡇⠈⠉⠊⠋⠌⠍⠎⠏⡈⡉⡊⡋⡌⡍⡎⡏⠐⠑⠒⠓⠔⠕⠖⠗⡐⡑⡒⡓⡔⡕⡖⡗⠘⠙⠚⠛⠜⠝⠞⠟⡘⡙⡚⡛⡜⡝⡞⡟⠠⠡⠢⠣⠤⠥⠦⠧⡠⡡⡢⡣⡤⡥⡦⡧⠨⠩⠪⠫⠬⠭⠮⠯⡨⡩⡪⡫⡬⡭⡮⡯⠰⠱⠲⠳⠴⠵⠶⠷⡰⡱⡲⡳⡴⡵⡶⡷⠸⠹⠺⠻⠼⠽⠾⠿⡸⡹⡺⡻⡼⡽⡾⡿⢀⢁⢂⢃⢄⢅⢆⢇⣀⣁⣂⣃⣄⣅⣆⣇⢈⢉⢊⢋⢌⢍⢎⢏⣈⣉⣊⣋⣌⣍⣎⣏⢐⢑⢒⢓⢔⢕⢖⢗⣐⣑⣒⣓⣔⣕⣖⣗⢘⢙⢚⢛⢜⢝⢞⢟⣘⣙⣚⣛⣜⣝⣞⣟⢠⢡⢢⢣⢤⢥⢦⢧⣠⣡⣢⣣⣤⣥⣦⣧⢨⢩⢪⢫⢬⢭⢮⢯⣨⣩⣪⣫⣬⣭⣮⣯⢰⢱⢲⢳⢴⢵⢶⢷⣰⣱⣲⣳⣴⣵⣶⣷⢸⢹⢺⢻⢼⢽⢾⢿⣸⣹⣺⣻⣼⣽⣾⣿",
+          2, 4],
+    ];
+
+    var canvas = document.querySelector('canvas');
+    var output = document.querySelector("textarea");
+    var ctx = canvas.getContext('2d');
+    var SCREEN_WIDTH = canvas.width = window.innerWidth * .25,
+        SCREEN_HEIGHT = canvas.height = window.innerHeight;
+
+    function update() {
+        var width = document.querySelector("#width").value;
+        var color = document.querySelector("#color").value;
+        var reverse = document.querySelector("#reverse").checked;
+        var widthScale = document.querySelector("#width-scale").value;
+        var smoothing = document.querySelector("#smoothing").checked;
+        var mod = document.querySelector("#mod").value;
+        var srounding = document.querySelector("#srounding").value;
+        
+        var code = document.querySelector("#code");
+        code.value = "transform( "
+            + width + ", "
+            + color + ", "
+            + reverse + ", "
+            + smoothing + ", "
+            + widthScale + ", "
+            + mod + ", "
+            + srounding + " )";
+        eval(code.value);
+    }
+
+    dropAble(document.body, img2NumberArray);
+
+    function dropAble(el, imgHandler) {
+        function drop(ev) {
+            ignoreDrag(ev);
+            var files = ev.dataTransfer.files;
+            //读取图片
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(files[0]);
+            img.onload = function () {
+                imgHandler({
+                    img: img,
+                    textWidth: img.width
+                });
+            };
+        }
+        function ignoreDrag(e) {
+            //因为我们在处理拖放，所以应该确保没有其他元素会取得这个事件
+            e.stopPropagation();
+            e.preventDefault();
+        }
+        el.ondragenter = ignoreDrag;
+        el.ondragover = ignoreDrag;
+        el.ondrop = drop;
+    }
+    var img = new Image();
+
+    function img2NumberArray(options) {
+        var o = options;
+        var width = o.textWidth, height;
+        var result = [];
+        ctx.imageSmoothingEnabled = o.smoothing;
+        o.widthScale = o.widthScale || 1;
+
+        ctx.clearRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+        height = (o.img.height / o.img.width) * width / o.widthScale;
+
+        ctx.drawImage(o.img, 0, 0, o.img.width, o.img.height, 0, 0, width, height);
+
+        var imgData = ctx.getImageData(0, 0, width, height);
+        // imgData { data: [r,g,b,a, r,g,b,a], width: int, height: int }
+        var data = imgData.data;
+        var avgColor;
+        for (var i = 0; i < data.length; i += 4) {
+            avgColor = (data[i] + data[i + 1] + data[i + 2]) / 3;
+            if (o.reverse) {
+                result.push(avgColor > o.color ? 1 : 0);
+            } else {
+                result.push(avgColor > o.color ? 0 : 1);
+            }
+            
+            data[i] = data[i+1] = data[i+2] = avgColor > o.color ? 255 : 0;
+        }
+
+       ctx.putImageData(imgData, 0, height);
+        // 在换成二维数组
+        var arr = [];
+        while (result.length > 0) {
+            arr.unshift(result.splice(-width));
+        }
+        return arr;
+    }
+
+    function transform(width, color, reverse, smoothing, widthScale, modIndex, srounding) {
+        
+        modIndex = (modIndex % modes.length) | 0;
+        srounding = (srounding % 3) | 0;
+        
+        var pxMap = img2NumberArray({
+            img: img,
+            textWidth: width || 80,
+            color: color || 127,
+            reverse: reverse || false,
+            smoothing: smoothing || false,
+            widthScale: widthScale || 1
+        });
+        
+        if(srounding !== 0) {
+            var type = srounding === 1 ? 0 : 1;
+            joinSrounding(pxMap, type);
+            console.log(srounding, srounding === '1', typeof srounding)
+        }
+        
+        var mod = modes[modIndex];
+        output.value = arr2text.apply(this, [pxMap].concat(mod));
+    }
+    
+    function joinSrounding(data, type) {
+        data.map(row => {
+            row.unshift(type);
+            row.push(type);
+        });
+        var border = [];
+        while(data[0].length > 1
+            && border.length !== data[0].length) {
+            border.push(type);
+        }
+        data.unshift(border);
+        data.push(border);
+    }
+
+    function arr2text(mappingArray, texts, column, row) {
+        var outputStr = "";
+        var arr = mappingArray;
+        for (var y = 0; y < arr.length; y += row) {
+            for (var x = 0; x < arr[y].length; x += column) {
+                // 每个 column*row 的字符格子
+                var index = "0B";
+                for (var tempCol = column; tempCol > 0; tempCol--) {
+                    for (var tempRow = row; tempRow > 0; tempRow--) {
+                        var yy = y + tempRow - 1;
+                        var xx = x + tempCol - 1;
+                        if ((typeof arr[yy]) === 'undefined' || (typeof arr[yy][xx]) === 'undefined') {
+                            index += 0;
+                            continue;
+                        }
+                        index += arr[yy][xx];
+                    }
+                }
+                outputStr += texts.charAt(index.toString(2));
+            }
+            outputStr += "\n";
+        }
+        console.log(outputStr);
+        return outputStr;
+    }
+
+</script>
+</body>
+</html>
