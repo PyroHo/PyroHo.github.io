@@ -198,7 +198,7 @@
             <option v-for="b,i in qr.border" :value="i">{{ b }}</option>
         </select></label>
         <label>字符翻转 (qr)
-          <input @input="showCode" type="checkbox" v-model="qr.reverseFont" name="reverseFont" title="reverseFont">
+          <input type="checkbox" v-model="qr.reverseFont" name="QRreverseFont" title="QRreverseFont">
         </label>
         <button class="primary" @click.enter.stop.prevent="showCode">转换</button>
         <div id="qrResult" style="display: none;"></div>
@@ -403,7 +403,8 @@
       el: '#container',
       data: data,
       watch: {
-        'qr.borderSlected': function() { this.showCode() }
+        'qr.borderSlected': function() { this.showCode() },
+        'qr.reverseFont': function () { this.showCode() }
       },
       methods: methods,
       computed: computed,
