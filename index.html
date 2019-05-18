@@ -165,6 +165,10 @@
       <label>字体 <select v-model="style.fontFamilySelected" name="fontFamily">
           <option v-for="f in style.fontFamily" :value="f">{{ f }}</option>
         </select></label>
+      <label>字体大小
+        <input type="range" v-model="style.fontSize" name="fontSize" min="5" max="28" step="1"
+          title="fontSize">
+      </label>
       <label>行间距
         <input type="range" v-model="style.lineHeight" name="lineHeight" min="0" max="28" step="1"
           title="lineHeight">
@@ -246,6 +250,7 @@
           'initial'
         ],
         "reverseFontColor": true,
+        "fontSize": 16,
         "lineHeight": 0,
         "letterSpacing": 0,
         "textAlignRight": false,
@@ -385,6 +390,7 @@
           'background-color': s.reverseFontColor ? '#212121' : '#f8f8f8',
           'color': s.reverseFontColor ? '#f8f8f8' : '#212121',
           'font-family': s.fontFamilySelected,
+          'fontSize': s.fontSize === 0 ? 'initial' : s.fontSize + 'px',
           'line-height': s.lineHeight === 0 ? 'initial' : s.lineHeight + 'px',
           'letter-spacing': s.letterSpacing === 0 ? 'initial' : s.letterSpacing + 'px',
           'text-align': s.textAlignRight ? 'right' : 'left'
