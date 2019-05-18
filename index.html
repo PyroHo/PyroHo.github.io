@@ -13,7 +13,7 @@
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
-        transition: .3s;
+        transition: width, height, flex .3s;
     }
     html {
         -ms-text-size-adjust: 100%;
@@ -162,16 +162,19 @@
       <label>垂直翻转
         <input type="checkbox" v-model="verticalReverse" name="verticalReverse" title="verticalReverse">
       </label>
-      <label>字体 <select v-model="style.fontFamilySelected" name="fontFamily">
-          <option v-for="f in style.fontFamily" :value="f">{{ f }}</option>
-        </select></label>
       <label>字体大小
         <input type="range" v-model="style.fontSize" name="fontSize" min="5" max="28" step="1"
           title="fontSize">
       </label>
+      <label>字体 <select v-model="style.fontFamilySelected" name="fontFamily">
+          <option v-for="f in style.fontFamily" :value="f">{{ f }}</option>
+        </select></label>
       <label>行间距
         <input type="range" v-model="style.lineHeight" name="lineHeight" min="0" max="28" step="1"
           title="lineHeight">
+      </label>
+      <label>右对齐
+        <input type="checkbox" v-model="style.textAlignRight" name="textAlignRight" title="textAlignRight">
       </label>
       <label>字间距
         <input type="range" v-model="style.letterSpacing" name="letterSpacing" min="0" max="10" step="1"
@@ -179,9 +182,6 @@
       </label>
       <label>颜色翻转
         <input type="checkbox" v-model="style.reverseFontColor" name="reverseFontColor" title="reverseFontColor">
-      </label>
-      <label>右对齐
-        <input type="checkbox" v-model="style.textAlignRight" name="textAlignRight" title="textAlignRight">
       </label>
       <label>边框
         <select v-model="borderSlected" name="border">
