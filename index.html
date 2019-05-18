@@ -1,69 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cmn-Hans">
 
 <head>
-  <meta charset="UTF-8">
+<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon"  href="favicon.png">
+
   <title>TextReverse&Replace</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      border-radius: 4px;
+    *, *:before, *:after {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        transition: .3s;
     }
-
+    html {
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent
+    }
+    body { margin: 0; }
+    textarea { resize: none; vertical-align: middle; }
     ::selection {
-      background-color: #212121;
-      color: #efefef;
+      background-color: #2196f3;
+      color: #212121;
     }
 
     #container {
       position: fixed;
+      top: 0;
+      left: 0;
       display: flex;
+      flex-flow: column nowrap;
       width: 100%;
       height: 100%;
       background-color: #efefef;
       overflow: auto;
     }
 
-    .left,
-    .result {
+    .top {
+      flex: 1;
+      display: flex;
+      flex-flow: row nowrap;
+    }
+    @media screen and (max-width: 950px) {
+      .top { flex-flow: column; }
+    }
+
+    .top textarea {
+      flex: 1;
+      overflow: auto;
+    }
+    .top textarea:hover {
+      flex: 7;
+    }
+    .top:hover {
+      flex: 3;
+    }
+
+    .bottom {
       flex: 1;
       overflow: auto;
     }
 
-    .left {
-      display: flex;
-      flex-flow: column;
+    .bottom textarea {
+      width: 22em;
+      height: 3em;
     }
-
-    .left .target,
-    .left .option {
-      flex: 1;
-    }
-
-    textarea {
-      font-size: 16px;
-      width: 99%;
-      height: 99%;
-      resize: none;
-      line-height: 19px;
-      letter-spacing: 0;
-    }
-
-    .left .option textarea {
-      width: 49%;
-      height: auto;
-      display: inline-block;
-    }
-
-    textarea.reverse-font-color {
-      background-color: #212121;
-      color: #fefefe;
-    }
-
-    textarea.text-align-right {
-      text-align: right;
-    }
+    
+    
+    
+    
 
     button,
     label {
@@ -142,72 +150,66 @@
 
 <body>
   <div id="container" @selectstart.prevent>
-    <div class="left">
-      <div class="target">
-        <!-- <textarea v-model="qr.on ? qrResult : source"></textarea> -->
-        <textarea v-model="source"></textarea>
-      </div>
-
-      <form class="option">
-        <label>水平翻转
-          <input type="checkbox" v-model="horizontalReverse" name="horizontalReverse" title="horizontalReverse">
-        </label>
-        <label>垂直翻转
-          <input type="checkbox" v-model="verticalReverse" name="verticalReverse" title="verticalReverse">
-        </label>
-        <label>字体 <select v-model="style.fontFamilySelected" name="fontFamily">
-            <option v-for="f in style.fontFamily" :value="f">{{ f }}</option>
-          </select></label>
-        <label>行间距
-          <input type="range" v-model="style.lineHeight" name="lineHeight" min="10" max="28" step="1"
-            title="lineHeight">
-        </label>
-        <label>字间距
-          <input type="range" v-model="style.letterSpacing" name="letterSpacing" min="-10" max="10" step="1"
-            title="letterSpacing">
-        </label>
-        <label>颜色翻转
-          <input type="checkbox" v-model="style.reverseFontColor" name="reverseFontColor" title="reverseFontColor">
-        </label>
-        <label>右对齐
-          <input type="checkbox" v-model="style.textAlignRight" name="textAlignRight" title="textAlignRight">
-        </label>
-        <label>边框
-          <select v-model="borderSlected" name="border">
-            <option v-for="b,i in border" :value="i">{{ b }}</option>
-          </select>
-        </label>
-        <br>
-        <textarea title="replace" v-model="replaceCmp" name="replace" rows="7" cols="10"></textarea>
-        <textarea title="swap" v-model="swapCmp" name="swap" rows="7" cols="10"></textarea>
-        <label>替换
-          <input type="checkbox" v-model="enableReplace" name="enableReplace" title="enableReplace">
-        </label>
-        <label>交换
-          <input type="checkbox" v-model="enableSwap" name="enableSwap" title="enableSwap">
-        </label>
-
-        <!-- 二维码 --><hr>
-        <!-- <label>开启二维码转换
-          <input type="checkbox" v-model="qr.on" name="qrOn" title="qrOn">
-        </label> -->
-        <label>
-          <input type="text" v-model="qr.source" name="qrSource" title="qrSource" placeholder="要转换成二维码的字符">
-        </label>
-        <label>边框 (qr) <select v-model="qr.borderSlected" name="qrBorder" >
-            <option v-for="b,i in qr.border" :value="i">{{ b }}</option>
-        </select></label>
-        <label>字符翻转 (qr)
-          <input type="checkbox" v-model="qr.reverseFont" name="QRreverseFont" title="QRreverseFont">
-        </label>
-        <button class="primary" @click.enter.stop.prevent="showCode">转换</button>
-        <div id="qrResult" style="display: none;"></div>
-      </form>
-    </div>
-
-    <div class="result">
+    <div class="top">
+      <!-- <textarea v-model="qr.on ? qrResult : source"></textarea> -->
+      <textarea v-model="source"></textarea>
       <textarea :style="textStyle" v-model="result"></textarea>
     </div>
+    <form class="bottom">
+      <label>水平翻转
+        <input type="checkbox" v-model="horizontalReverse" name="horizontalReverse" title="horizontalReverse">
+      </label>
+      <label>垂直翻转
+        <input type="checkbox" v-model="verticalReverse" name="verticalReverse" title="verticalReverse">
+      </label>
+      <label>字体 <select v-model="style.fontFamilySelected" name="fontFamily">
+          <option v-for="f in style.fontFamily" :value="f">{{ f }}</option>
+        </select></label>
+      <label>行间距
+        <input type="range" v-model="style.lineHeight" name="lineHeight" min="0" max="28" step="1"
+          title="lineHeight">
+      </label>
+      <label>字间距
+        <input type="range" v-model="style.letterSpacing" name="letterSpacing" min="0" max="10" step="1"
+          title="letterSpacing">
+      </label>
+      <label>颜色翻转
+        <input type="checkbox" v-model="style.reverseFontColor" name="reverseFontColor" title="reverseFontColor">
+      </label>
+      <label>右对齐
+        <input type="checkbox" v-model="style.textAlignRight" name="textAlignRight" title="textAlignRight">
+      </label>
+      <label>边框
+        <select v-model="borderSlected" name="border">
+          <option v-for="b,i in border" :value="i">{{ b }}</option>
+        </select>
+      </label>
+      <br>
+      <textarea title="replace" v-model="replaceCmp" name="replace" rows="7" cols="10"></textarea>
+      <textarea title="swap" v-model="swapCmp" name="swap" rows="7" cols="10"></textarea>
+      <label>替换 replace
+        <input type="checkbox" v-model="enableReplace" name="enableReplace" title="enableReplace">
+      </label>
+      <label>交换 swap
+        <input type="checkbox" v-model="enableSwap" name="enableSwap" title="enableSwap">
+      </label>
+
+      <!-- 二维码 --><hr>
+      <!-- <label>开启二维码转换
+        <input type="checkbox" v-model="qr.on" name="qrOn" title="qrOn">
+      </label> -->
+      <label>
+        <input type="text" v-model="qr.source" name="qrSource" title="qrSource" placeholder="要转换成二维码的字符">
+      </label>
+      <label>边框 (qr) <select v-model="qr.borderSlected" name="qrBorder" >
+          <option v-for="b,i in qr.border" :value="i">{{ b }}</option>
+      </select></label>
+      <label>字符翻转 (qr)
+        <input type="checkbox" v-model="qr.reverseFont" name="QRreverseFont" title="QRreverseFont">
+      </label>
+      <button class="primary" @click.enter.stop.prevent="showCode">转换</button>
+      <div id="qrResult" style="display: none;"></div>
+    </form>
   </div>
   <script src="qrcode.js"></script>
   <script src="vue.js"></script>
@@ -224,16 +226,16 @@
 █▌███▓▓▓▓▓▓▓▓▐░░▄▓▓███▓▓▓▄▀▐█\n\
 █▐█▓▀░░▀▓▓▓▓▓▓▓▓▓██████▓▓▓▓▐█\n\
 ▌▓▄▌▀░▀░▐▀█▄▓▓██████████▓▓▓▌█\n\
-▌▓▓▓▄▄▀▀▓▓▓▀▓▓▓▓▓▓▓▓█▓█▓█▓▓▌█\n\
-█▐▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓█▓█▓█▓█▓▓▓▐█",
+▌▓▓▓▄▄▀▀▓▓▓▀▓▓▓▓▓▓▓▓█▓█▓█▓▓▌█  Swap Swim\n\
+█▐▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓█▓█▓█▓█▓▓▓▐█ replace A",
       "horizontalReverse": false,
       "verticalReverse": false,
       "enableReplace": false,
       "enableSwap": false,
       "borderSlected": 0,
       "border": ['none', 'lighten', 'darken'],
-      "replace": [['a', 'b']],
-      "swap": [["▌", "▐"], ["▀", "▄"], ["░", "█"]],
+      "replace": [['replace A', 'With B']],
+      "swap": [["▌", "▐"], ["▀", "▄"], ["░", "█"], ["Swap", "Swim"]],
       "style": {
         "fontFamilySelected": 'Arial',
         "fontFamily": [
@@ -244,7 +246,7 @@
           'initial'
         ],
         "reverseFontColor": true,
-        "lineHeight": 20,
+        "lineHeight": 0,
         "letterSpacing": 0,
         "textAlignRight": false,
       },
@@ -383,8 +385,8 @@
           'background-color': s.reverseFontColor ? '#212121' : '#f8f8f8',
           'color': s.reverseFontColor ? '#f8f8f8' : '#212121',
           'font-family': s.fontFamilySelected,
-          'line-height': s.lineHeight + 'px',
-          'letter-spacing': s.letterSpacing + 'px',
+          'line-height': s.lineHeight === 0 ? 'initial' : s.lineHeight + 'px',
+          'letter-spacing': s.letterSpacing === 0 ? 'initial' : s.letterSpacing + 'px',
           'text-align': s.textAlignRight ? 'right' : 'left'
         };
       },
