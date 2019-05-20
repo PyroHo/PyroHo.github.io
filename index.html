@@ -40,27 +40,26 @@
     }
 
     .top {
-      flex: 1;
+      flex: 6;
       display: flex;
       flex-flow: row nowrap;
-    }
-    @media screen and (max-width: 950px) {
-      .top { flex-flow: column; }
     }
 
     .top textarea {
       flex: 1;
       overflow: auto;
     }
-    .top textarea:hover {
-      flex: 7;
+    .top textarea[style] {
+      flex: 10;
     }
-    .top:hover {
-      flex: 3;
+    
+    @media screen and (max-width: 950px) {
+      .top { flex-flow: column; }
+      .top:hover textarea[style] { flex: 1; }
     }
 
     .bottom {
-      flex: 1;
+      flex: 5;
       overflow: auto;
     }
 
@@ -73,6 +72,7 @@
     
     
 
+    .btn,
     button,
     label {
       color: #333;
@@ -93,18 +93,22 @@
       transition: .3s;
     }
 
+
+    .btn:hover,
     label:hover,
     button:hover {
       color: #333;
       background-color: #e6e6e6;
       border-color: #adadad;
     }
-
+    
+    .btn input,
     label input {
       vertical-align: middle;
       cursor: pointer;
     }
-
+    
+    .btn,
     label {
       margin-top: 5px;
       margin-bottom: 5px;
@@ -134,6 +138,30 @@
       border-color: #204d74;
     }
 
+    button.sec {
+      color: #fff;
+      background-color: #4caf50;
+      border-color: #9feca5;
+    }
+
+    button.sec:hover {
+      color: #fff;
+      background-color: #429a46;
+      border-color: #9feca5;
+    }
+
+    button.thi {
+      color: #fff;
+      background-color: #337ab7;
+      border-color: #2e6da4;
+    }
+
+    button.thi:hover {
+      color: #fff;
+      background-color: #286090;
+      border-color: #2e6da4;
+    }
+
     input[type=text] {
       width: 100%;
       border: 0;
@@ -153,9 +181,9 @@
     <div class="top">
       <!-- <textarea v-model="qr.on ? qrResult : source"></textarea> -->
       <textarea v-model="source"></textarea>
-      <textarea :style="textStyle" v-model="result"></textarea>
+      <textarea :style="textStyle" :value="result" id="result" ></textarea>
     </div>
-    <form class="bottom">
+    <div class="bottom">
       <label>水平翻转
         <input type="checkbox" v-model="horizontalReverse" name="horizontalReverse" title="horizontalReverse">
       </label>
@@ -203,20 +231,30 @@
         <input type="checkbox" v-model="qr.on" name="qrOn" title="qrOn">
       </label> -->
       <label>
-        <input type="text" v-model="qr.source" name="qrSource" title="qrSource" placeholder="要转换成二维码的字符">
+        <input @input="showCode" type="text" v-model="qr.source" name="qrSource" title="qrSource" placeholder="要转换成二维码的字符">
       </label>
-      <label>边框 (qr) <select v-model="qr.borderSlected" name="qrBorder" >
+      <label>边框 (qr) <select @change="showCode" v-model="qr.borderSlected" name="qrBorder" >
           <option v-for="b,i in qr.border" :value="i">{{ b }}</option>
       </select></label>
+      <span class="btn">
+        上<input @change="showCode" type="checkbox" v-model="qr.borderOption.t" name="qrBorderOptionT">
+        下<input @change="showCode" type="checkbox" v-model="qr.borderOption.b" name="qrBorderOptionB">
+        左<input @change="showCode" type="checkbox" v-model="qr.borderOption.l" name="qrBorderOptionL">
+        右<input @change="showCode" type="checkbox" v-model="qr.borderOption.r" name="qrBorderOptionR">
+      </span>
       <label>字符翻转 (qr)
-        <input type="checkbox" v-model="qr.reverseFont" name="QRreverseFont" title="QRreverseFont">
+        <input @change="showCode" type="checkbox" v-model="qr.reverseFont" name="QRreverseFont" title="QRreverseFont">
       </label>
       <button class="primary" @click.enter.stop.prevent="showCode">转换</button>
+      <button data-clipboard-target="#result" class="sec" >复制</button>
+      <button data-clipboard-target="#result" data-clipboard-action="cut">剪切</button>
+      <p>如果觉得二维码字符太长 , 可以只保留上边框</p>
       <div id="qrResult" style="display: none;"></div>
-    </form>
+    </div>
   </div>
   <script src="qrcode.js"></script>
   <script src="vue.js"></script>
+  <script src="clipboard.min.js"></script>
   <script>
 
     var data = {
@@ -230,8 +268,10 @@
 █▌███▓▓▓▓▓▓▓▓▐░░▄▓▓███▓▓▓▄▀▐█\n\
 █▐█▓▀░░▀▓▓▓▓▓▓▓▓▓██████▓▓▓▓▐█\n\
 ▌▓▄▌▀░▀░▐▀█▄▓▓██████████▓▓▓▌█\n\
-▌▓▓▓▄▄▀▀▓▓▓▀▓▓▓▓▓▓▓▓█▓█▓█▓▓▌█  Swap Swim\n\
-█▐▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓█▓█▓█▓█▓▓▓▐█ replace A",
+▌▓▓▓▄▄▀▀▓▓▓▀▓▓▓▓▓▓▓▓█▓█▓█▓▓▌█\n\
+█▐▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓█▓█▓█▓█▓▓▓▐█\n\
+         replace A\n\
+         Swap Swim",
       "horizontalReverse": false,
       "verticalReverse": false,
       "enableReplace": false,
@@ -258,8 +298,14 @@
       // 新增 QR 模块
       "qr": {
         // "on": false,
-        "reverseFont": false,
-        "borderSlected": 0,
+        "reverseFont": true,
+        "borderSlected": 1,
+        "borderOption": {
+          "t": true,
+          "b": true,
+          "l": true,
+          "r": true
+        },
         "border": ['none', 'lighten', 'darken'],
         "transformer": new QRCode(document.querySelector('#qrResult'), { width: 70, height: 70 }),
         "source": ''
@@ -307,10 +353,16 @@
         data.unshift(border.join(''));
         data.push(border.join(''));
       },
-      joinBorderQR: function (data, type) {
+      joinBorderQR: function (data, type, option) {
+        option = option || {
+          t: true,
+          b: true,
+          l: true,
+          r: true
+        };
         data.map(row => {
-          row.unshift(type);
-          row.push(type);
+          option.l && row.unshift(type);
+          option.r && row.push(type);
         });
 
         var border = [];
@@ -319,8 +371,8 @@
           border.push(type);
         }
 
-        data.unshift(border);
-        data.push(border);
+        option.t && data.unshift(border);
+        option.b && data.push(border);
       },
       getEncodeText: function (text) {
         this.qr.transformer.makeCode(text);
@@ -330,7 +382,7 @@
         // 添加边框
         if (this.qr.borderSlected !== 0) {
           var type = this.qr.borderSlected !== 1;
-          this.joinBorderQR(code, type);
+          this.joinBorderQR(code, type, this.qr.borderOption);
         }
         // 字符翻转
         var trueValue = this.qr.reverseFont ? 0 : 1;
@@ -364,6 +416,9 @@
         // this.replace = [];
         // this.swap = [];
         this.source = this.getEncodeText(this.qr.source);
+      },
+      copyResult: function() {
+        // this.select() document.execCommand("Copy");
       }
     };
 
@@ -391,32 +446,33 @@
           'color': s.reverseFontColor ? '#f8f8f8' : '#212121',
           'font-family': s.fontFamilySelected,
           'fontSize': s.fontSize === 0 ? 'initial' : s.fontSize + 'px',
-          'line-height': s.lineHeight === 0 ? 'initial' : s.lineHeight + 'px',
-          'letter-spacing': s.letterSpacing === 0 ? 'initial' : s.letterSpacing + 'px',
+          'line-height': s.lineHeight == 0 ? 'initial' : s.lineHeight + 'px',
+          'letter-spacing': s.letterSpacing == 0 ? 'initial' : s.letterSpacing + 'px',
           'text-align': s.textAlignRight ? 'right' : 'left'
         };
       },
       result: function () {
         return this.transformText(this.source);
-      },
-      // sourceAlias: function() {
-      //   return this.qr.on ? this.qrResult : this.source;
-      // },
-      // qrResult: function () {
-      //   return this.getEncodeText(this.qr.source);
-      // }
+      }
     };
 
     var app = new Vue({
       el: '#container',
       data: data,
-      watch: {
-        'qr.borderSlected': function() { this.showCode() },
-        'qr.reverseFont': function () { this.showCode() }
-      },
       methods: methods,
       computed: computed,
-      beforeCreate: initStringUtil
+      beforeCreate: initStringUtil,
+      mounted: function() {
+        var clipboard = new ClipboardJS(document.querySelectorAll('button[data-clipboard-target]'));
+
+        clipboard.on('success', function(e) {
+            console.info('Action:', e.action);
+            console.info('Text:', e.text);
+            console.info('Trigger:', e.trigger);
+            alert('复制好啦 , 哥哥');
+            e.clearSelection();
+        });
+      }
     });
 
     function initStringUtil() {
@@ -432,88 +488,6 @@
       }
     }
 
-
-    // UserData
-    (function (window, target, result) {
-      var UserData = {};
-      var dataKey = "89969";
-      var history = getData() || [];
-      var curIndex = history.length > 0 ? history.length - 1 : 0;
-      UserData =
-        {
-          save: function () {
-            var data = {
-              "target": target.value,
-              "result": result.value
-            };
-            history.push(data);
-            while (history.length > 200) {
-              UserData.cut(10);
-            }
-            localStorage.setItem(dataKey, JSON.stringify(history));
-            alert("saved \n total: " + history.length);
-          },
-          removeCurrent: function () {
-            if ((typeof history[curIndex]) === "undefined") {
-              alert("noooo~  \n rest: " + history.length);
-              return;
-            }
-            if (history.splice(curIndex, 1)) {
-              localStorage.setItem(dataKey, JSON.stringify(history));
-              alert("removed \n rest: " + history.length);
-            } else {
-              alert("noooo~  \n rest: " + history.length);
-            }
-          },
-          removeAll: function () {
-            history = [];
-            curIndex = 0;
-            return localStorage.removeItem(dataKey);
-          },
-          recordPrev: function () {
-            if (curIndex > 0 && history.length > 1) {
-              setData(history[--curIndex]);
-            }
-          },
-          recordNext: function () {
-            if (curIndex < history.length - 1 && history.length > 1) {
-              setData(history[++curIndex]);
-            }
-          },
-          show: function () {
-            if (history.length < 1) {
-              alert("empty set");
-              return;
-            }
-            var allReesult = "";
-            history.forEach(function (t, i, arr) {
-              allReesult += "\n<!-- Start " + i + " Start -->\n";
-              allReesult += t.result;
-              allReesult += "\n<!-- End " + i + " End -->\n";
-            });
-            result.value = allReesult;
-            alert("done~ total: " + history.length);
-          }
-        };
-      function getData() {
-        return JSON.parse(localStorage.getItem(dataKey));
-      }
-      function setData(data) {
-        target.value = data.target;
-        result.value = data.result;
-      }
-      function cut(num) {
-        num = num < 1 ? 0 : num;
-        if (history.length < 1) {
-          return;
-        }
-        while (num-- > 0) {
-          history.shift();
-        }
-      }
-      window.UserData = UserData;
-      // })(window, target, result);
-    });
 
   </script>
 </body>
