@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes">
+    <title>啵啵啵</title>
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- hijs -->
+    <link rel="stylesheet" href="/css/hljs/github2.css">
+    <script src="/js/highlight.pack.js"></script>
+    <script src="/js/dat.gui.js"></script>
+    <script src="/js/three.js"></script>
+    <script src="/js/vue.js"></script>
+    <script>
+      hljs.configure({
+        useBR: false,
+        tabReplace: '    '
+      });
+      document.addEventListener('DOMContentLoaded', function (ev) {
+        document.querySelectorAll('pre>code').forEach(function (block) {
+          hljs.highlightBlock(block);
+        });
+      });
+    </script>
+</head>
+  
+  <body class="container">
+    
+<header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">啵啵啵</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/archives" class="menu-item-link">Archives</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://www.baidu.com" class="menu-item-link">Rush b</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function (ev) {
+    document.querySelectorAll('.ou----t').forEach(function (block) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+    <main class="main">
+      
+<article class="post">
+  <div class="post-title">
+    <h2 class="title"></h2>
+  </div>
+   <div class="post-meta">
+    <span class="post-time">2019-04-15</span>
+  </div>
+  <div class="post-content fmt">
+    <h2 id="MQ-消息队列有什么优缺点"><a href="#MQ-消息队列有什么优缺点" class="headerlink" title="MQ 消息队列有什么优缺点"></a>MQ 消息队列有什么优缺点</h2><p>消息队列有什么优缺点优点上面已经说了，就是在特殊场景下有其对应的好处，<strong>解耦</strong>、<br><strong>异步</strong>、<strong>削峰</strong>。</p>
+<p>缺点有以下几个：</p>
+<ol>
+<li><strong>系统可用性降低</strong><br>系统引入的外部依赖越多，越容易挂掉。<br>本来你就是 A 系统调用 BCD 三个系统的接口就好了，人 ABCD 四个系统好好的，没<br>啥问题，你偏加个 MQ 进来，万一 MQ 挂了咋整，MQ 一挂，整套系统崩溃的，你不就<br>完了？</li>
+</ol>
+<ol start="2">
+<li><p><strong>系统复杂度提高</strong><br>硬生生加个 MQ 进来，你怎么保证消息没有重复消费？怎么处理消息丢失的情况？怎么<br>保证消息传递的顺序性？头大头大，问题一大堆，痛苦不已。</p>
+</li>
+<li><p><strong>一致性问题</strong><br>A 系统处理完了直接返回成功了，人都以为你这个请求就成功了；但是问题是，<br>要是 BCD 三个系统那里，BD 两个系统写库成功了，结果 C 系统写库失败了，咋整？<br>你这数据就不一致了。所以消息队列实际是一种非常复杂的架构，你引入它有很多好处，<br>但是也得针对它带来的坏处做各种额外的技术方案和架构来规避掉，做好之后，你会发现，<br>妈呀，系统复杂度提升了一个数量级，也许是复杂了 10 倍。但是关键时刻，用，还是得用的。</p>
+</li>
+</ol>
+
+  </div>
+</article>
+
+
+    </main>
+  </body>
+</html>

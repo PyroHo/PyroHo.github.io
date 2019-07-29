@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes">
+    <title>啵啵啵</title>
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- hijs -->
+    <link rel="stylesheet" href="/css/hljs/github2.css">
+    <script src="/js/highlight.pack.js"></script>
+    <script src="/js/dat.gui.js"></script>
+    <script src="/js/three.js"></script>
+    <script src="/js/vue.js"></script>
+    <script>
+      hljs.configure({
+        useBR: false,
+        tabReplace: '    '
+      });
+      document.addEventListener('DOMContentLoaded', function (ev) {
+        document.querySelectorAll('pre>code').forEach(function (block) {
+          hljs.highlightBlock(block);
+        });
+      });
+    </script>
+</head>
+  
+  <body class="container">
+    
+<header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">啵啵啵</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/archives" class="menu-item-link">Archives</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://www.baidu.com" class="menu-item-link">Rush b</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function (ev) {
+    document.querySelectorAll('.ou----t').forEach(function (block) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+    <main class="main">
+      
+<article class="post">
+  <div class="post-title">
+    <h2 class="title">JavaScript 继承</h2>
+  </div>
+   <div class="post-meta">
+    <span class="post-time">2019-04-19</span>
+  </div>
+  <div class="post-content fmt">
+    <p>吧啦吧啦记录一下</p>
+<a id="more"></a>
+<p>首先存在一个 <code>Rifle</code> 父类</p>
+<pre><code class="javascript">function Rifle(name, ammo, sounds) {
+    this.name = name;
+    this.ammo = 30;
+    this.sounds = [&#39;da&#39;, &#39;daa&#39;, &#39;ada&#39;];
+}
+Rifle.prototype.fire = function() {
+    console.log(this.sounds);
+};
+</code></pre>
+<p>然后出现一个 <code>Negev</code> 子类 , 用以继承 <code>Rifle</code> 父类 , 开始继承 ~ ~</p>
+<pre><code class="javascript">function Negev(name, ammo, sounds, clip) {
+    Rifle.apply(this, arguments);  // 继承父类的 &quot;成员变量&quot;
+    // Rifle.call(this, name. ammo);  // 当然你也可以这样写
+    this.clip = clip || 0;
+}
+// 继承父类的 &quot;静态变量&quot; 和 &quot;方法&quot;
+function extend(sub, sup) {
+    sub.prototype = Object.create(sup.prototype);
+    sub.prototype.constructor = sub;
+}
+extend(Negev, Rifle);
+Negev.prototype.reload = function() {
+    console.log(this.name + &#39;: reloading&#39;);
+};
+</code></pre>
+<p>总结一下 :</p>
+<ol>
+<li>子类构造函数内调用父类构造方法 , 但是绑定了子类的上下文<br>这么做直接导致了父类在使用 <code>this.xxx = xxx</code> 的时候 , 所有的字段都被子类给 <strong>“继承”</strong> 了</li>
+<li><code>extend()</code> 方法把父类原型链的内容搬过来 , 再恢复子类的构造器</li>
+<li>切记<strong>不要</strong>直接这样赋值 <code>sub.prototype = sup.prototype;</code> 这样你更新子类原型链的时候<strong>父类的原型链也会跟着改变</strong> , 这还得了 ? ( 为什么会改变 , 因为这两个变量指向的是同一个对象 ) ; <code>Object.create()</code> 的出现就是为了解决这个问题; <code>Object.create()</code> 相当于</li>
+</ol>
+<pre><code class="javascript">function create(obj) {
+    function Temp() {};
+    Temp.prototype = obj;
+    return new Temp();
+}
+/* 干了什么 : 复制了一份 obj */
+</code></pre>
+<p>这样子 prototype 就不会影响到父 prototype 了</p>
+<p>测试一啵</p>
+<pre><code class="javascript">var negev = new Negev(&#39;negev&#39;, 150, [&#39;哒哒哒&#39;, &#39;哒哒&#39;], 3);
+var rifle = new Rifle(&#39;rifle&#39;, 25, [&#39;biu~&#39;, &#39;biu~~~~&#39;]);
+
+console.log(&#39;negev instanceof Rifle ===&#39;, negev instanceof Rifle);  // true
+console.log(&#39;negev instanceof Negev ===&#39;, negev instanceof Negev);  // true
+console.log(&#39;Negev.prototype&#39;, Negev.prototype);
+console.log(&#39;Rifle.prototype&#39;, Rifle.prototype);
+Negev.prototype.asd = &#39;asd&#39;;
+console.log(&#39;Negev.prototype&#39;, Negev.prototype);
+console.log(&#39;Rifle.prototype&#39;, Rifle.prototype);
+</code></pre>
+<p>结果</p>
+<p><strong>完了</strong></p>
+
+  </div>
+</article>
+
+
+    </main>
+  </body>
+</html>

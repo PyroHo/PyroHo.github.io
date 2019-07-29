@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes">
+    <title>啵啵啵</title>
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- hijs -->
+    <link rel="stylesheet" href="/css/hljs/github2.css">
+    <script src="/js/highlight.pack.js"></script>
+    <script src="/js/dat.gui.js"></script>
+    <script src="/js/three.js"></script>
+    <script src="/js/vue.js"></script>
+    <script>
+      hljs.configure({
+        useBR: false,
+        tabReplace: '    '
+      });
+      document.addEventListener('DOMContentLoaded', function (ev) {
+        document.querySelectorAll('pre>code').forEach(function (block) {
+          hljs.highlightBlock(block);
+        });
+      });
+    </script>
+</head>
+  
+  <body class="container">
+    
+<header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">啵啵啵</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/archives" class="menu-item-link">Archives</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://www.baidu.com" class="menu-item-link">Rush b</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function (ev) {
+    document.querySelectorAll('.ou----t').forEach(function (block) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+    <main class="main">
+      
+<article class="post">
+  <div class="post-title">
+    <h2 class="title">Hello World</h2>
+  </div>
+   <div class="post-meta">
+    <span class="post-time">2019-03-29</span>
+  </div>
+  <div class="post-content fmt">
+    <p><canvas id="canvas354879" border="1">noooo~</canvas></p>
+<p><label>dashLong<input value="8" id="dashLong" name="dashLong" type="range" min="1" max="100" step="1"></label></p>
+<p><label>dashSpacing<input value="4" id="dashSpacing" name="dashSpacing" type="range" min="1" max="100" step="1"></label></p>
+<p><label>speed<input value="16" id="speed" name="speed" type="range" min="1" max="1000" step="1"></label></p>
+<script>
+window.addEventListener('load', function(ev) {
+    var canvas = document.querySelector('#canvas354879');
+    var ctx = canvas.getContext('2d');
+    var width = 200, lineWidth = 3;
+    canvas.height = canvas.width = width + lineWidth;
+    var dashLong = 8, dashSpacing = 4, dashOffset = 0, speed = 16;
+
+    var dlon = document.querySelector("#dashLong");
+    var dspc = document.querySelector("#dashSpacing");
+    var dspe = document.querySelector("#speed");
+
+    dlon.addEventListener('input', update, false);
+    dspc.addEventListener('input', update, false);
+    dspe.addEventListener('input', update, false);
+
+    function update() {
+        dashLong = dlon.value;
+        dashSpacing = dspc.value;
+        speed = dspe.value;
+    }
+
+    console.log('Hello World');
+
+    (function draw() {
+        dashOffset++;
+        if( dashOffset >= dashLong + dashSpacing){
+            dashOffset = 0;
+        }
+        ctx.setLineDash([dashLong, dashSpacing]);
+        ctx.clearRect( 0, 0, canvas.width, canvas.height);
+        ctx.lineDashOffset = -dashOffset;
+        ctx.lineWidth = lineWidth;
+        ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);
+        setTimeout(draw, 1000/speed);
+    })();
+}, false);
+</script>
+
+
+<a id="more"></a>
+<h2 id="yee"><a href="#yee" class="headerlink" title="yee~"></a>yee~</h2><pre><code>(function draw() {
+    dashOffset++;
+    if( dashOffset &gt;= dashLong + dashSpacing){
+        dashOffset = 0;
+    }
+    ctx.setLineDash([dashLong, dashSpacing]);
+    ctx.clearRect( 0, 0, canvas.width, canvas.height);
+    ctx.lineDashOffset = -dashOffset;
+    ctx.lineWidth = lineWidth;
+    ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);
+    setTimeout(draw, 1000/speed);
+})();
+</code></pre>
+  </div>
+</article>
+
+
+    </main>
+  </body>
+</html>

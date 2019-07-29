@@ -1,0 +1,362 @@
+
+.container {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/*@media (min-width: 768px) {
+    .container {
+        width: 750px
+    }
+}*/
+@media (min-width: 992px) {
+    .container {
+        max-width: 970px
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px
+    }
+}
+
+@-webkit-keyframes bouncedelay {
+    0%,
+    80%,
+    100% {
+        -webkit-transform: scale(0)
+    }
+    40% {
+        -webkit-transform: scale(1)
+    }
+}
+
+@keyframes bouncedelay {
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+        -webkit-transform: scale(0)
+    }
+    40% {
+        transform: scale(1);
+        -webkit-transform: scale(1)
+    }
+}
+
+@-webkit-keyframes rotate {
+    from {
+        -webkit-transform: rotate(0)
+    }
+    to {
+        -webkit-transform: rotate(360deg)
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0);
+        -webkit-transform: rotate(0)
+    }
+    to {
+        transform: rotate(360deg);
+        -webkit-transform: rotate(360deg)
+    }
+}
+
+.img-responsive {
+    display: block;
+    width: 100% \9;
+    max-width: 100%;
+    height: auto
+}
+
+.img-rounded {
+    border-radius: 6px
+}
+
+.img-circle {
+    border-radius: 50%
+}
+
+.fmt {
+    line-height: 1.6;
+    white-space: normal;
+    word-break: keep-all;
+    word-wrap: break-word;
+}
+
+.fmt ul, .fmt ol {
+    margin-bottom: 10px;
+}
+
+.fmt ul li, .fmt ol li {
+    margin: .3em 0
+}
+
+.fmt ul ul, .fmt ul ol, .fmt ol ul, .fmt ol ol {
+    margin-bottom: 0
+}
+
+.fmt ul p, .fmt ol p {
+    margin: 0
+}
+
+.fmt p {
+    margin: 0 0 10px;
+}
+.fmt p:last-child {
+    margin-bottom: 0
+}
+
+.fmt p > p:empty, .fmt div > p:empty, .fmt p > div:empty, .fmt div > br:only-child, .fmt p + br {
+    display: none
+}
+
+.fmt img, .fmt video, .fmt audio {
+    position: static !important;
+    max-width: 100%
+}
+
+.fmt blockquote {
+    padding: 10px 20px;
+    margin: 0 0 20px;
+    color: #555;
+    font-size: 1em;
+    border-left: 5px solid #009A61;
+    background-color: #f8f8f8;
+}
+
+.fmt blockquote p:last-child,
+.fmt blockquote ul:last-child,
+.fmt blockquote ol:last-child {
+    margin-bottom: 0
+}
+
+.fmt blockquote:before, blockquote:after {
+    content: ""
+}
+
+.fmt code,
+.fmt kbd {
+    padding: 2px 4px;
+    font-size: 90%;
+    border-radius: 4px
+}
+
+.fmt kbd {
+    color: #555;
+    background-color: #eee;
+}
+
+.fmt code {
+    color: #c7254e;
+    background-color: #f9f2f4;
+    white-space: pre;
+    word-break: normal;
+    word-wrap: break-word;
+}
+
+.fmt pre {
+    margin: 0 0 10px;
+    padding: 10px;
+    font-size: 90%;
+    color: #333;
+    background-color: #f8f8f8;
+    display: block;
+    overflow: auto;
+    border: none;
+    border-radius: 4px;
+}
+
+.fmt pre code {
+    padding: 0;
+    color: inherit;
+    background-color: inherit;
+}
+
+.fmt table {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.fmt table th, .fmt table td {
+    border: 1px solid #E6E6E6;
+    padding: 5px 8px;
+}
+
+.fmt table th {
+    background-color: #EFEFEF;
+}
+
+.fmt a:not(.btn) {
+}
+
+.fmt a:not(.btn):hover {
+    text-decoration: underline;
+}
+
+.hljs-comment, .hljs-template_comment, .diff .hljs-header, .hljs-javadoc {
+    font-style: normal
+}
+
+.btn {
+    min-width: 4em;
+    max-width: 100%;
+    display: inline-block;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    padding: 0.3em .7em;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: .3s;
+}
+.btn:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+    text-decoration: none;
+}
+.btn[disabled] {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: .65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: #fff;
+    border-color: #ccc
+}
+.btn:active {
+    opacity: .7;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #009a61;
+    border-color: #008151
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #006741;
+    border-color: #00432a
+}
+
+.btn-danger {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a
+}
+.btn-danger:hover {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925
+}
+
+/* others */
+.tag {
+    padding: 4px 8px;
+    line-height: 2; /* or else breaking line will be too much close */
+    color: #009a61;
+    background-color: #009a6122;
+    border-radius: 2px;
+}
+.tag:hover {
+    color: #fff;
+    background-color: #009a61;
+}
+
+.text-secondly {
+    font-size: 90%;
+    color: #999;
+}
+
+.wrap-text {
+    white-space: normal;
+    word-break: normal;
+    word-wrap: break-word;
+}
+
+.wrap-code {
+    white-space: pre;
+    word-break: normal;
+    word-wrap: break-word;
+}
+
+.nowrap {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block
+}
+
+.nowrap_1row {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical
+}
+
+.nowrap_2row {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical
+}
+
+.nowrap_3row {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical
+}
+
+.shadow {
+    -moz-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.09), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.09), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.09), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.15)
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis
+}
+
+.noscroll {
+    height: 100vh;
+    overflow-y: hidden
+}
+
+.x-scroll {
+    overflow-x: auto
+}
+
+.y-scroll {
+    overflow-y: auto
+}
+
+
+

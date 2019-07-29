@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes">
+    <title>啵啵啵</title>
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- hijs -->
+    <link rel="stylesheet" href="/css/hljs/github2.css">
+    <script src="/js/highlight.pack.js"></script>
+    <script src="/js/dat.gui.js"></script>
+    <script src="/js/three.js"></script>
+    <script src="/js/vue.js"></script>
+    <script>
+      hljs.configure({
+        useBR: false,
+        tabReplace: '    '
+      });
+      document.addEventListener('DOMContentLoaded', function (ev) {
+        document.querySelectorAll('pre>code').forEach(function (block) {
+          hljs.highlightBlock(block);
+        });
+      });
+    </script>
+</head>
+  
+  <body class="container">
+    
+<header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">啵啵啵</a>
+  </div>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/archives" class="menu-item-link">Archives</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://www.baidu.com" class="menu-item-link">Rush b</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
+
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function (ev) {
+    document.querySelectorAll('.ou----t').forEach(function (block) {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+    <main class="main">
+      
+<article class="post">
+  <div class="post-title">
+    <h2 class="title"></h2>
+  </div>
+   <div class="post-meta">
+    <span class="post-time">2019-04-13</span>
+  </div>
+  <div class="post-content fmt">
+    <pre><code class="css">button.danger {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+button.danger:hover {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+button.primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+button.primary:hover {
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
+}
+button:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+button {
+    color: #333;
+    background-color: #fff;
+    display: inline-block;
+    padding: 6px 12px;
+    /*margin-bottom: 0;*/
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+</code></pre>
+<p>1、用滚动插件<br>2、只是谷歌可以用::-webkit-scrollbar 等专有属性优化或者隐藏<br>3、外面套多一个div，overflow:hidden的。。。固定宽度高度的<br>滚动条一般在15-20之间。。滚动的div多出20px就可以了。。</p>
+<pre><code>#F44336, #FF9800, #FFEB3B, #4CAF50, #2196F3, #3F51B5, #9C27B0
+text-shadow: 2px 2px 10px #000;
+box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07);
+</code></pre><pre><code class="javascript">function rgb2hex(r, g, b) {
+    return &#39;#&#39; + ((1 &lt;&lt; 24) + (r &lt;&lt; 16) + (g &lt;&lt; 8) + b)
+        .toString(16) // 先转成十六进制，然后返回字符串
+        .substr(1);   // 去除字符串的最高位，返回后面六个字符串
+}
+
+function hex2rgb(hex) {
+    return &#39;rgb(&#39;
+        + hex &gt;&gt; 16 &amp; 0xff + &#39;, &#39;
+        + hex &gt;&gt; 8 &amp; 0xff + &#39;, &#39;
+        + hex + &#39;)&#39;;
+}
+
+function colorRandom() {
+    return &#39;#&#39; + (0xffffff + ((Math.random() * 0xffffff) | 0))
+        .toString(16).substr(1);
+}
+
+// 返回两数之间的值
+function random(min, max) {
+    if(&quot;number&quot; !== (typeof max)) {
+        max = 0;
+    }
+    return Math.random() * (max - min) + min;
+}
+
+function getSign(num){
+    if(&quot;number&quot; === (typeof num)) {
+        return num &lt; 0 ? -1 : 1;
+    } else {
+        return getSign(random(-1, 1));
+    }
+}
+
+function toAngle(arc) {
+    return arc * (Math.PI/180);
+}
+
+function toArc(angle) {
+    return angle / (Math.PI/180);
+}
+
+
+/* fake_click */
+    function export_raw(name, blob) {
+        // name=文件名, blob=文件二进制对象
+        var urlObject = window.URL || window.webkitURL || window;
+        var save_link = document.createElementNS(&quot;http://www.w3.org/1999/xhtml&quot;, &quot;a&quot;)
+        save_link.href = urlObject.createObjectURL(blob);
+        save_link.download = name;
+        fake_click(save_link);
+    }
+
+    function fake_click(obj) {
+        var ev = document.createEvent(&quot;MouseEvents&quot;);
+        ev.initMouseEvent(
+            &quot;click&quot;, true, false, window, 0, 0, 0, 0, 0
+            , false, false, false, false, 0, null
+        );
+        obj.dispatchEvent(ev);
+    }
+</code></pre>
+<pre><code>/* 盲文 */
+</code></pre><p>⠁⠁⠂⠃⠄⠅⠆⠇<br>⡀⡁⡂⡃⡄⡅⡆⡇<br>⠈⠉⠊⠋⠌⠍⠎⠏<br>⡈⡉⡊⡋⡌⡍⡎⡏<br>⠐⠑⠒⠓⠔⠕⠖⠗<br>⡐⡑⡒⡓⡔⡕⡖⡗<br>⠘⠙⠚⠛⠜⠝⠞⠟<br>⡘⡙⡚⡛⡜⡝⡞⡟<br>⠠⠡⠢⠣⠤⠥⠦⠧<br>⡠⡡⡢⡣⡤⡥⡦⡧<br>⠨⠩⠪⠫⠬⠭⠮⠯<br>⡨⡩⡪⡫⡬⡭⡮⡯<br>⠰⠱⠲⠳⠴⠵⠶⠷<br>⡰⡱⡲⡳⡴⡵⡶⡷<br>⠸⠹⠺⠻⠼⠽⠾⠿<br>⡸⡹⡺⡻⡼⡽⡾⡿<br>⢀⢁⢂⢃⢄⢅⢆⢇<br>⣀⣁⣂⣃⣄⣅⣆⣇<br>⢈⢉⢊⢋⢌⢍⢎⢏<br>⣈⣉⣊⣋⣌⣍⣎⣏<br>⢐⢑⢒⢓⢔⢕⢖⢗<br>⣐⣑⣒⣓⣔⣕⣖⣗<br>⢘⢙⢚⢛⢜⢝⢞⢟<br>⣘⣙⣚⣛⣜⣝⣞⣟<br>⢠⢡⢢⢣⢤⢥⢦⢧<br>⣠⣡⣢⣣⣤⣥⣦⣧<br>⢨⢩⢪⢫⢬⢭⢮⢯<br>⣨⣩⣪⣫⣬⣭⣮⣯<br>⢰⢱⢲⢳⢴⢵⢶⢷<br>⣰⣱⣲⣳⣴⣵⣶⣷<br>⢸⢹⢺⢻⢼⢽⢾⢿<br>⣸⣹⣺⣻⣼⣽⣾⣿</p>
+<p>⠁⠁⠂⠃⠄⠅⠆⠇⡀⡁⡂⡃⡄⡅⡆⡇⠈⠉⠊⠋⠌⠍⠎⠏⡈⡉⡊⡋⡌⡍⡎⡏⠐⠑⠒⠓⠔⠕⠖⠗⡐⡑⡒⡓⡔⡕⡖⡗⠘⠙⠚⠛⠜⠝⠞⠟⡘⡙⡚⡛⡜⡝⡞⡟⠠⠡⠢⠣⠤⠥⠦⠧⡠⡡⡢⡣⡤⡥⡦⡧⠨⠩⠪⠫⠬⠭⠮⠯⡨⡩⡪⡫⡬⡭⡮⡯⠰⠱⠲⠳⠴⠵⠶⠷⡰⡱⡲⡳⡴⡵⡶⡷⠸⠹⠺⠻⠼⠽⠾⠿⡸⡹⡺⡻⡼⡽⡾⡿⢀⢁⢂⢃⢄⢅⢆⢇⣀⣁⣂⣃⣄⣅⣆⣇⢈⢉⢊⢋⢌⢍⢎⢏⣈⣉⣊⣋⣌⣍⣎⣏⢐⢑⢒⢓⢔⢕⢖⢗⣐⣑⣒⣓⣔⣕⣖⣗⢘⢙⢚⢛⢜⢝⢞⢟⣘⣙⣚⣛⣜⣝⣞⣟⢠⢡⢢⢣⢤⢥⢦⢧⣠⣡⣢⣣⣤⣥⣦⣧⢨⢩⢪⢫⢬⢭⢮⢯⣨⣩⣪⣫⣬⣭⣮⣯⢰⢱⢲⢳⢴⢵⢶⢷⣰⣱⣲⣳⣴⣵⣶⣷⢸⢹⢺⢻⢼⢽⢾⢿⣸⣹⣺⣻⣼⣽⣾⣿</p>
+<pre><code>[&#39;log&#39;, &#39;info&#39;, &#39;warn&#39;, &#39;error&#39;].forEach(function(method) {
+    console[method] = console[method].bind(
+        console,
+        new Date().toISOString()
+    );
+});
+
+// getCharFromCharCode
+(function() {
+    document.writeln(&quot;&lt;style&gt;span:hover{background-color:ff0;}&lt;/style&gt;&quot;);
+    for(var i = -1000; i &lt; 10000; i++) {
+        if(i%60 === 0) {
+            document.writeln(&quot;&lt;br&gt;&quot;);
+        }
+        document.write(&#39;&lt;span title=&quot;&#39; + i + &#39;&quot;&gt;&#39;
+            + String.fromCharCode(i) + &#39;&lt;/span&gt;&#39;);
+    }
+})();
+</code></pre><p>░░░░░░░█▐▓▓░████▄▄▄█▀▄▓▓▓▌███<br>░░░░░▄█▌▀▄▓▓▄▄▄▄▀▀▀▄▓▓▓▓▓▌███<br>░░░▄█▀▀▄▓█▓▓▓▓▓▓▓▓▓▓▓▓▀░▓▌███<br>░░█▀▄▓▓▓███▓▓▓███▓▓▓▄░░▄▓▐███<br>░█▌▓▓▓▀▀▓▓▓▓███▓▓▓▓▓▓▓▄▀▓▓▐██<br>▐█▐██▐░▄▓▓▓▓▓▀▄░▀▓▓▓▓▓▓▓▓▓▌██<br>█▌███▓▓▓▓▓▓▓▓▐░░▄▓▓███▓▓▓▄▀▐█<br>█▐█▓▀░░▀▓▓▓▓▓▓▓▓▓██████▓▓▓▓▐█<br>▌▓▄▌▀░▀░▐▀█▄▓▓██████████▓▓▓▌█<br>▌▓▓▓▄▄▀▀▓▓▓▀▓▓▓▓▓▓▓▓█▓█▓█▓▓▌█<br>█▐▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓█▓█▓█▓█▓▓▓▐█</p>
+<p>███▐▓▓▓▄▀█▄▄▄████░▓▓▌█░░░░░░░<br>███▐▓▓▓▓▓▄▀▀▀▄▄▄▄▓▓▄▀▐█▄░░░░░<br>███▐▓░▀▓▓▓▓▓▓▓▓▓▓▓▓█▓▄▀▀█▄░░░<br>███▌▓▄░░▄▓▓▓███▓▓▓███▓▓▓▄▀█░░<br>██▌▓▓▀▄▓▓▓▓▓▓▓███▓▓▓▓▀▀▓▓▓▐█░<br>██▐▓▓▓▓▓▓▓▓▓▀░▄▀▓▓▓▓▓▄░▌██▌█▌<br>█▌▀▄▓▓▓███▓▓▄░░▌▓▓▓▓▓▓▓▓███▐█<br>█▌▓▓▓▓██████▓▓▓▓▓▓▓▓▓▀░░▀▓█▌█<br>█▐▓▓▓██████████▓▓▄█▀▌░▀░▀▐▄▓▐<br>█▐▓▓█▓█▓█▓▓▓▓▓▓▓▓▀▓▓▓▀▀▄▄▓▓▓▐<br>█▌▓▓▓█▓█▓█▓█▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓▌█</p>
+<p>░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<br>░█░█░█▀█░█▀█░█▀█░█░█░░█▀▄░█▀▀░█░█░█░░█░█░█▀▀░█▀█░█▀█░█░<br>░█▀█░█▀█░█▀▀░█▀▀░▀█▀░░█░█░█▀▀░█░█░█░░▀█▀░█▀▀░█▀█░█▀▄░▀░<br>░▀░▀░▀░▀░▀░░░▀░░░░▀░░░▀░▀░▀▀▀░░▀░▀░░░░▀░░▀▀▀░▀░▀░▀░▀░▀░<br>░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</p>
+<p>⠁⠁⠁⠁⠁⠁⠁⢀⣀⡀⠁⠁⡠⠐⠒⠒⠢⢄⠁⠁⠁⠁⠁⠁<br>⠁⠁⠁⠁⢀⣔⣈⣀⠁⢈⠱⠖⠒⠒⠒⠒⠤⡀⠙⢦⠁⠁⠁⠁<br>⠁⣀⠴⠭⠤⠤⢄⢀⢝⡓⠴⠶⢒⣒⠠⢀⠁⠁⠁⠁⠇⠁⠁⠁<br>⠮⠐⣩⣭⡍⠉⠐⡃⠁⣠⣶⣦⠁⠁⠉⢒⠂⠁⠁⠁⢸⠁⠁⠁<br>⡇⠁⣏⣹⡿⠁⠁⡄⠁⣿⣈⣿⠃⠁⡐⡁⠁⠁⠁⠁⠘⠱⡀⠁<br>⠘⡦⠭⠭⠄⣒⠥⠓⡦⢌⠉⠥⠔⡨⠊⠁⠁⠁⠁⠁⠁⠁⢱⠁<br>⠁⢈⠫⢍⣀⡐⠁⠁⠈⠒⠲⠬⠥⠁⠒⠈⠁⠁⠠⢄⠁⠁⠁⡆<br>⢠⣌⡀⠁⠰⠁⠁⠁⠁⠁⠁⠁⢀⣠⣤⣶⣾⣿⡷⠄⠁⠁⠁⠇<br>⠘⢽⣾⣵⣶⣶⣶⣶⣶⣶⣿⡿⣿⠻⠿⠛⡩⣻⡟⠁⠁⠁⠸⠁<br>⢀⢀⣺⡯⠃⠛⠺⠛⠁⠉⠉⡡⠄⡲⣶⡾⡿⠏⠁⠁⠁⡠⠁⠁<br>⠃⢸⣿⣣⣤⢀⣰⣤⣤⢴⣭⣶⡻⣟⠿⠋⠁⠁⠁⢀⠔⠁⠁⠁<br>⠁⠈⠻⠿⢿⠟⠿⠿⠿⠿⠛⠋⠉⠁⠁⠁⠁⣀⠔⠁⠁⠁⠁⠁<br>⠁⠁⠁⠁⠁⠉⠒⠤⠤⠤⠤⠄⠤⠤⠤⠒⠉⠁⠁⠁⠁⠁⠁⠁</p>
+<pre><code class="javascript">// domain(arr, index)
+function mirrorString(str, domain, option) {
+    if((typeof str) === &quot;undefined&quot;) {
+        console.error(&quot;not a String&quot;);
+        return &quot;&quot;;
+    }
+    domain = domain || console.log;
+    var strArr = str.split(&quot;\n&quot;);
+    strArr.forEach(function(item, index, arr) {
+        arr[index] = item.split(&quot;&quot;).reverse().join(&quot;&quot;);
+        domain(arr, index);
+    });
+    return strArr.join(&quot;\n&quot;);
+}
+
+String.prototype.replaceAll = function (f, e) {
+    return this.replace(new RegExp(f, &quot;g&quot;), e);
+};
+
+String.prototype.swap = function (a, b) {
+    var tag = &quot;###&quot;;
+    var newVal = &quot;&quot;;
+    // mark
+    newVal = this.replaceAll(a, tag + a);
+    newVal = newVal.replaceAll(b, tag + b);
+    // swap
+    newVal = newVal.replaceAll(tag + a, b);
+    newVal = newVal.replaceAll(tag + b, a);
+    return newVal;
+}
+
+function domain(arr, index) {
+    arr[index] = arr[index].swap(&quot;▌&quot;, &quot;▐&quot;);
+}
+</code></pre>
+<p>(function() {<br>    var imgs = document.querySelectorAll(‘img’);<br>    var className = ‘click’;<br>    document.write(‘<style> img{ transition: .3s; width:25%;} img.’ + className + ‘{width: 100%;}</style>‘);<br>    for(var i = 0; i &lt; imgs.length; i++) {<br>      if(imgs[i].src) {<br>        document.write(‘&lt;img onclick=”this.classList.contains(‘ + className + ‘)\<br>                               ? this.classList.remove(‘ + className + ‘)\<br>                               : this.classList.add(‘ + className + ‘);”\<br>                             src=”‘ + imgs[i].src + ‘“&gt;’);<br>      }<br>    }<br>})();</p>
+<p>// 拿到帖子的图片 ( 当前页 )<br>document.querySelectorAll(‘img.BDE_Image’).forEach(function(t, i, arr) { document.write(‘<img src="' + t.src + '">‘) });</p>
+<p>// 大图页 1<br>(function(selector, replace) {<br>    var imgs = document.querySelectorAll(selector);<br>    document.write(‘<style> img{width:20%;}</style>‘);<br>    for(var i = 0; i &lt; imgs.length; i++) {<br>        if(imgs[i].src) {<br>          var img = document.createElement(‘img’);<br>          img.src = imgs[i].src.replace(replace[0], replace[1]);<br>          img.onload = function() {<br>            document.body.append(this);<br>          };<br>      }<br>    }<br>})(‘#dt-bp-tab-nav &gt; div &gt; ul &gt; li.tab-trigger &gt; div &gt; a &gt; img’, [‘.64x64.jpg’, ‘.jpg’]);</p>
+<p>// 详情页<br>(function(selector) {<br>    var imgs = document.querySelectorAll(selector);<br>    document.body.innerHTML = (‘<style> img{width:20%;}</style>‘);<br>    for(var i = 0; i &lt; imgs.length; i++) {<br>      if(imgs[i].src) {<br>          var img = document.createElement(‘img’);<br>          img.src = imgs[i].src;<br>          img.onload = function() {<br>            document.body.append(this);<br>          };<br>      }<br>    }<br>})(‘#desc-lazyload-container &gt; div &gt; img’);</p>
+<p>(function(selector, callback) {<br>    var els = document.querySelectorAll(selector);<br>    var history = [];<br>    for(var i = 0; i &lt; els.length; i++) {<br>      callback(els, i, els);<br>    }<br>})(‘#desc-lazyload-container &gt; div &gt; img’, function(t, i, ts) {<br>    console.log(i);<br>});</p>
+
+  </div>
+</article>
+
+
+    </main>
+  </body>
+</html>

@@ -1,541 +1,1024 @@
 <!DOCTYPE html>
-<html lang="zh-cmn-Hans">
-
-<head>
-<meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon"  href="favicon.png">
-
-  <title>TextReverse&Replace</title>
-  <style>
-    *, *:before, *:after {
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
-        transition: width, height, flex .3s;
-    }
-    html {
-        -ms-text-size-adjust: 100%;
-        -webkit-text-size-adjust: 100%;
-        -webkit-tap-highlight-color: transparent
-    }
-    body { margin: 0; }
-    textarea { resize: none; vertical-align: middle; }
-    ::selection {
-      background-color: #2196f3;
-      color: #212121;
-    }
-
-    #container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      flex-flow: column nowrap;
-      width: 100%;
-      height: 100%;
-      background-color: #efefef;
-      overflow: auto;
-    }
-
-    .top {
-      flex: 6;
-      display: flex;
-      flex-flow: row nowrap;
-    }
-    
-    button[data-clipboard-target] {
-      position: relative;
-      outline: 0;
-    }
-    
-    button[data-clipboard-target]:before {
-      content: "复制好啦 , 哥哥";
-      vertical-align: middle;
-      font-size: 90%;
-      color: #efefef;
-      background-color: #212121dd;
-      border-radius: 4px;
-      padding: 2px 5px;
-      display: block;
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    
-    button[data-clipboard-target]:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 6px solid #212121dd;
-      border-top-color: transparent;
-      border-left-color: transparent;
-      border-right-color: transparent;
-    }
-    button[data-clipboard-target]:after,
-    button[data-clipboard-target]:before {
-      transition: .3s;
-      opacity: 0;
-    }
-    button[data-clipboard-target].coped:after,
-    button[data-clipboard-target].coped:before {
-      opacity: 1;
-    }
-    
-
-    .top textarea {
-      flex: 1;
-      overflow: auto;
-    }
-    .top textarea#result {
-      flex: 10;
-    }
-    
-    @media screen and (max-width: 950px) {
-      .top { flex-flow: column; }
-      .top:hover #result { flex: 1; }
-    }
-
-    .bottom {
-      flex: 5;
-      overflow: auto;
-    }
-
-    .bottom textarea {
-      width: 22em;
-      height: 3em;
-    }
-    
-    
-    
-    
-
-    .btn,
-    button,
-    label {
-      color: #333;
-      background-color: #fff;
-      display: inline-block;
-      padding: 6px 12px;
-      /*margin-bottom: 0;*/
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.42857143;
-      text-align: center;
-      white-space: nowrap;
-      vertical-align: middle;
-      cursor: pointer;
-      background-image: none;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      transition: .3s;
-    }
-
-
-    .btn:hover,
-    label:hover,
-    button:hover {
-      color: #333;
-      background-color: #e6e6e6;
-      border-color: #adadad;
-    }
-    
-    .btn input,
-    label input {
-      vertical-align: middle;
-      cursor: pointer;
-    }
-    
-    .btn,
-    label {
-      margin-top: 5px;
-      margin-bottom: 5px;
-    }
-
-    button.danger {
-      color: #fff;
-      background-color: #d9534f;
-      border-color: #d43f3a;
-    }
-
-    button.danger:hover {
-      color: #fff;
-      background-color: #c9302c;
-      border-color: #ac2925;
-    }
-
-    button.primary {
-      color: #fff;
-      background-color: #337ab7;
-      border-color: #2e6da4;
-    }
-
-    button.primary:hover {
-      color: #fff;
-      background-color: #286090;
-      border-color: #204d74;
-    }
-
-    button.sec {
-      color: #fff;
-      background-color: #4caf50;
-      border-color: #9feca5;
-    }
-
-    button.sec:hover {
-      color: #fff;
-      background-color: #429a46;
-      border-color: #9feca5;
-    }
-
-    button.thi {
-      color: #fff;
-      background-color: #337ab7;
-      border-color: #2e6da4;
-    }
-
-    button.thi:hover {
-      color: #fff;
-      background-color: #286090;
-      border-color: #2e6da4;
-    }
-
-    input[type=text] {
-      width: 100%;
-      border: 0;
-      outline: 0;
-      -webkit-appearance: none;
-      background-color: transparent;
-      font-size: inherit;
-      color: inherit;
-      height: 1.41176471em;
-      line-height: 1.41176471;
-    }
-  </style>
+<html lang="zh">
+  <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=yes">
+    <title>啵啵啵</title>
+    <link rel="shortcut icon" href="/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- hijs -->
+    <link rel="stylesheet" href="/css/hljs/github2.css">
+    <script src="/js/highlight.pack.js"></script>
+    <script src="/js/dat.gui.js"></script>
+    <script src="/js/three.js"></script>
+    <script src="/js/vue.js"></script>
+    <script>
+      hljs.configure({
+        useBR: false,
+        tabReplace: '    '
+      });
+      document.addEventListener('DOMContentLoaded', function (ev) {
+        document.querySelectorAll('pre>code').forEach(function (block) {
+          hljs.highlightBlock(block);
+        });
+      });
+    </script>
 </head>
-
-<body>
-  <div id="container" @selectstart.prevent>
-    <div class="top">
-      <!-- <textarea v-model="qr.on ? qrResult : source"></textarea> -->
-      <textarea v-model="source"></textarea>
-      <textarea :style="textStyle" :value="result" id="result" ></textarea>
-    </div>
-    <div class="bottom">
-      <label>水平翻转
-        <input type="checkbox" v-model="horizontalReverse" name="horizontalReverse" title="horizontalReverse">
-      </label>
-      <label>垂直翻转
-        <input type="checkbox" v-model="verticalReverse" name="verticalReverse" title="verticalReverse">
-      </label>
-      <label>字体大小
-        <input type="range" v-model="style.fontSize" name="fontSize" min="5" max="28" step="1"
-          title="fontSize">
-      </label>
-      <label>字体 <select v-model="style.fontFamilySelected" name="fontFamily">
-          <option v-for="f in style.fontFamily" :value="f">{{ f }}</option>
-        </select></label>
-      <label>行间距
-        <input type="range" v-model="style.lineHeight" name="lineHeight" min="0" max="28" step="1"
-          title="lineHeight">
-      </label>
-      <label>右对齐
-        <input type="checkbox" v-model="style.textAlignRight" name="textAlignRight" title="textAlignRight">
-      </label>
-      <label>字间距
-        <input type="range" v-model="style.letterSpacing" name="letterSpacing" min="0" max="10" step="1"
-          title="letterSpacing">
-      </label>
-      <label>颜色翻转
-        <input type="checkbox" v-model="style.reverseFontColor" name="reverseFontColor" title="reverseFontColor">
-      </label>
-      <label>边框
-        <select v-model="borderSlected" name="border">
-          <option v-for="b,i in border" :value="i">{{ b }}</option>
-        </select>
-      </label>
-      <br>
-      <textarea title="replace" v-model="replaceCmp" name="replace" rows="7" cols="10"></textarea>
-      <textarea title="swap" v-model="swapCmp" name="swap" rows="7" cols="10"></textarea>
-      <label>替换 replace
-        <input type="checkbox" v-model="enableReplace" name="enableReplace" title="enableReplace">
-      </label>
-      <label>交换 swap
-        <input type="checkbox" v-model="enableSwap" name="enableSwap" title="enableSwap">
-      </label>
-
-      <!-- 二维码 --><hr>
-      <!-- <label>开启二维码转换
-        <input type="checkbox" v-model="qr.on" name="qrOn" title="qrOn">
-      </label> -->
-      <label>
-        <input @input="showCode" type="text" v-model="qr.source" name="qrSource" title="qrSource" placeholder="要转换成二维码的字符">
-      </label>
-      <label>边框 (qr) <select @change="showCode" v-model="qr.borderSlected" name="qrBorder" >
-          <option v-for="b,i in qr.border" :value="i">{{ b }}</option>
-      </select></label>
-      <span class="btn">
-        上<input @change="showCode" type="checkbox" v-model="qr.borderOption.t" name="qrBorderOptionT">
-        下<input @change="showCode" type="checkbox" v-model="qr.borderOption.b" name="qrBorderOptionB">
-        左<input @change="showCode" type="checkbox" v-model="qr.borderOption.l" name="qrBorderOptionL">
-        右<input @change="showCode" type="checkbox" v-model="qr.borderOption.r" name="qrBorderOptionR">
-      </span>
-      <label>字符翻转 (qr)
-        <input @change="showCode" type="checkbox" v-model="qr.reverseFont" name="QRreverseFont" title="QRreverseFont">
-      </label>
-      <button class="primary" @click.enter.stop.prevent="showCode">转换</button>
-      <button data-clipboard-target="#result" class="sec" >复制</button>
-      <button data-clipboard-target="#result" data-clipboard-action="cut">剪切</button>
-      <p>如果觉得二维码字符太长 , 可以只保留上边框</p>
-      <div id="qrResult" style="display: none;"></div>
-    </div>
+  
+  <body class="container">
+    
+<header class="header">
+  <div class="blog-title">
+    <a href="/" class="logo">啵啵啵</a>
   </div>
-  <script src="qrcode.js"></script>
-  <script src="vue.js"></script>
-  <script src="clipboard.min.js"></script>
-  <script>
+  <nav class="navbar">
+    <ul class="menu">
+      
+        <li class="menu-item">
+          <a href="/" class="menu-item-link">Home</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="/archives" class="menu-item-link">Archives</a>
+        </li>
+      
+        <li class="menu-item">
+          <a href="https://www.baidu.com" class="menu-item-link">Rush b</a>
+        </li>
+      
+    </ul>
+  </nav>
+</header>
 
-    var data = {
-      "source": "\
-░░░░░░░█▐▓▓░████▄▄▄█▀▄▓▓▓▌███\n\
-░░░░░▄█▌▀▄▓▓▄▄▄▄▀▀▀▄▓▓▓▓▓▌███\n\
-░░░▄█▀▀▄▓█▓▓▓▓▓▓▓▓▓▓▓▓▀░▓▌███\n\
-░░█▀▄▓▓▓███▓▓▓███▓▓▓▄░░▄▓▐███\n\
-░█▌▓▓▓▀▀▓▓▓▓███▓▓▓▓▓▓▓▄▀▓▓▐██\n\
-▐█▐██▐░▄▓▓▓▓▓▀▄░▀▓▓▓▓▓▓▓▓▓▌██\n\
-█▌███▓▓▓▓▓▓▓▓▐░░▄▓▓███▓▓▓▄▀▐█\n\
-█▐█▓▀░░▀▓▓▓▓▓▓▓▓▓██████▓▓▓▓▐█\n\
-▌▓▄▌▀░▀░▐▀█▄▓▓██████████▓▓▓▌█\n\
-▌▓▓▓▄▄▀▀▓▓▓▀▓▓▓▓▓▓▓▓█▓█▓█▓▓▌█\n\
-█▐▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓█▓█▓█▓█▓▓▓▐█\n\
-         replace A\n\
-         Swap Swim",
-      "horizontalReverse": false,
-      "verticalReverse": false,
-      "enableReplace": false,
-      "enableSwap": false,
-      "borderSlected": 0,
-      "border": ['none', 'lighten', 'darken'],
-      "replace": [['replace A', 'With B']],
-      "swap": [["▌", "▐"], ["▀", "▄"], ["░", "█"], ["Swap", "Swim"]],
-      "style": {
-        "fontFamilySelected": 'Arial',
-        "fontFamily": [
-          'Arial',
-          'Verdana',
-          'sans-serif',
-          'monospace',
-          'initial'
-        ],
-        "reverseFontColor": true,
-        "fontSize": 16,
-        "lineHeight": 0,
-        "letterSpacing": 0,
-        "textAlignRight": false,
-      },
-      // 新增 QR 模块
-      "qr": {
-        // "on": false,
-        "reverseFont": true,
-        "borderSlected": 1,
-        "borderOption": {
-          "t": true,
-          "b": true,
-          "l": true,
-          "r": true
-        },
-        "border": ['none', 'lighten', 'darken'],
-        "transformer": new QRCode(document.querySelector('#qrResult'), { width: 70, height: 70 }),
-        "source": ''
-      }
-    };
 
-    var methods = {
-      transformText: function (text) {
-        // 替换
-        this.enableReplace && this.replace.forEach(function (item, i, array) {
-          // TODO 会产生 bug ( 少数情况下 )
-          text = text.replaceAll(item[0], item[1]);
-        });
-        // 互换
-        this.enableSwap && this.swap.forEach(function (item, i, array) {
-          // TODO 会产生 bug ( 少数情况下 )
-          text = text.swap(item[0], item[1]);
-        });
-        var textArr = text.split("\n");
-        // 垂直翻转
-        this.verticalReverse && textArr.reverse();
-        // 水平翻转
-        this.horizontalReverse && textArr.forEach(function (item, i, arr) {
-          arr[i] = item.split("").reverse().join("");
-        });
-        // 边框
-        if (this.borderSlected !== 0) {
-          var type = this.borderSlected === 1 ? '░' : '█';
-          this.joinBorder(textArr, type);
-        }
 
-        return textArr.join("\n");
-      },
-      joinBorder: function (data, type) {
-        data.forEach(function(t, i, a) {
-          a[i] = type + a[i] + type;
-        });
+<script>
 
-        var border = [];
-        while (data[0].length > 1 &&
-          border.length !== data[0].length) {
-          border.push(type);
-        }
-
-        data.unshift(border.join(''));
-        data.push(border.join(''));
-      },
-      joinBorderQR: function (data, type, option) {
-        option = option || {
-          t: true,
-          b: true,
-          l: true,
-          r: true
-        };
-        data.map(row => {
-          option.l && row.unshift(type);
-          option.r && row.push(type);
-        });
-
-        var border = [];
-        while (data[0].length > 1 &&
-          border.length !== data[0].length) {
-          border.push(type);
-        }
-
-        option.t && data.unshift(border);
-        option.b && data.push(border);
-      },
-      getEncodeText: function (text) {
-        this.qr.transformer.makeCode(text);
-        return this._code2Text(this.qr.transformer._oQRCode.modules, "░▀▄█", 1, 2);
-      },
-      _code2Text: function (code, texts, column, row) {
-        // 添加边框
-        if (this.qr.borderSlected !== 0) {
-          var type = this.qr.borderSlected !== 1;
-          this.joinBorderQR(code, type, this.qr.borderOption);
-        }
-        // 字符翻转
-        var trueValue = this.qr.reverseFont ? 0 : 1;
-        var falseValue = this.qr.reverseFont ? 1 : 0;
-        // 开始转换
-        var outputStr = "";
-        for (var y = 0; y < code.length; y += row) {
-          for (var x = 0; x < code[y].length; x += column) {
-            // 每个 column*row 的字符格子
-            var index = "0B";
-            for (var tempCol = column; tempCol > 0; tempCol--) {
-              for (var tempRow = row; tempRow > 0; tempRow--) {
-                var yy = y + tempRow - 1;
-                var xx = x + tempCol - 1;
-                if ((typeof code[yy]) === 'undefined' || (typeof code[yy][xx]) === 'undefined') {
-                  index += 0;
-                  continue;
-                }
-                index += code[yy][xx] ? trueValue : falseValue;
-              }
-            }
-            outputStr += texts.charAt(index.toString(2));
-          }
-          outputStr += "\n";
-        }
-
-        console.log(outputStr);
-        return outputStr;
-      },
-      showCode: function () {
-        // this.replace = [];
-        // this.swap = [];
-        this.source = this.getEncodeText(this.qr.source);
-      },
-      copyResult: function() {
-        // this.select() document.execCommand("Copy");
-      }
-    };
-
-    var computed = {
-      replaceCmp: {
-        get: function () {
-          return JSON.stringify(this.replace, null, 0);
-        },
-        set: function (newValue) {
-          this.replace = JSON.parse(newValue) || [];
-        }
-      },
-      swapCmp: {
-        get: function () {
-          return JSON.stringify(this.swap, null, 0);
-        },
-        set: function (newValue) {
-          this.swap = JSON.parse(newValue) || [];
-        }
-      },
-      textStyle: function () {
-        var s = this.style;
-        return {
-          'background-color': s.reverseFontColor ? '#212121' : '#f8f8f8',
-          'color': s.reverseFontColor ? '#f8f8f8' : '#212121',
-          'font-family': s.fontFamilySelected,
-          'fontSize': s.fontSize === 0 ? 'initial' : s.fontSize + 'px',
-          'line-height': s.lineHeight == 0 ? 'initial' : s.lineHeight + 'px',
-          'letter-spacing': s.letterSpacing == 0 ? 'initial' : s.letterSpacing + 'px',
-          'text-align': s.textAlignRight ? 'right' : 'left'
-        };
-      },
-      result: function () {
-        return this.transformText(this.source);
-      }
-    };
-
-    var app = new Vue({
-      el: '#container',
-      data: data,
-      methods: methods,
-      computed: computed,
-      beforeCreate: initStringUtil,
-      mounted: function() {
-        var clipboard = new ClipboardJS(document.querySelectorAll('button[data-clipboard-target]'));
-        var stop = 0;
-        clipboard.on('success', function(e) {
-            console.info('Action:', e.action);
-            console.info('Text:', e.text);
-            console.info('Trigger:', e.trigger);
-            e.trigger.classList.add('coped');
-            clearTimeout(stop);
-            stop = setTimeout(function() {
-              e.trigger.classList.remove('coped');
-            }, 2000);
-            e.clearSelection();
-        });
-      }
+  document.addEventListener('DOMContentLoaded', function (ev) {
+    document.querySelectorAll('.ou----t').forEach(function (block) {
+      hljs.highlightBlock(block);
     });
+  });
+</script>
+    <main class="main">
+      
+<!-- 标题 -->
+<h1>痛苦啵堪</h1>
 
-    function initStringUtil() {
-      String.prototype.replaceAll = function (f, e) {
-        return this.split(f).join(e);
-      };
-      String.prototype.swap = function (a, b) {
-        var tmp = this.split(a);
-        for (var i = 0; i < tmp.length; i++) {
-          tmp[i] = tmp[i].split(b).join(a);
-        }
-        return tmp.join(b);
-      }
+<!-- 文章列表 nooooo~ -->
+<section class="posts">
+  
+    <article class="post">
+      <h4>
+        <a class="post-title-link" href="/20190714/线性代数的本质-01/">
+            线性代数的本质-01
+        </a>
+      </h4>
+        <div class="post-meta text-secondly">
+            
+                <a class="tag" href="/tags/线性代数/">线性代数</a>
+            
+          <span class="post-time">2019-07-14</span>
+        </div>
+      <div class="post-content fmt">
+        <!-- <h3 id="行列式"><a href="#行列式" class="headerlink" title="行列式"></a>行列式</h3><p>大意是 : 单位正方形的面积 x 行列式 = 转换后的面积</p>
+<p><strong> 行列式怎么算 ? </strong></p>
+<p>2D 的时候</p>
+<p>假设有矩阵 </p>
+<pre><code>|a b|
+|c d|
+</code></pre><p>那么他的行列式为 <code>ad - bc</code></p>
+<p>$a=x+y$</p>
+ -->
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <h4>
+        <a class="post-title-link" href="/20190419/JavaScript 继承/">
+            JavaScript 继承
+        </a>
+      </h4>
+        <div class="post-meta text-secondly">
+            
+                <a class="tag" href="/tags/JavaScript/">JavaScript</a>
+            
+                <a class="tag" href="/tags/我爱黎明/">我爱黎明</a>
+            
+          <span class="post-time">2019-04-19</span>
+        </div>
+      <div class="post-content fmt">
+        <!-- <p>吧啦吧啦记录一下</p>
+<a id="more"></a>
+<p>首先存在一个 <code>Rifle</code> 父类</p>
+<pre><code class="javascript">function Rifle(name, ammo, sounds) {
+    this.name = name;
+    this.ammo = 30;
+    this.sounds = [&#39;da&#39;, &#39;daa&#39;, &#39;ada&#39;];
+}
+Rifle.prototype.fire = function() {
+    console.log(this.sounds);
+};
+</code></pre>
+<p>然后出现一个 <code>Negev</code> 子类 , 用以继承 <code>Rifle</code> 父类 , 开始继承 ~ ~</p>
+<pre><code class="javascript">function Negev(name, ammo, sounds, clip) {
+    Rifle.apply(this, arguments);  // 继承父类的 &quot;成员变量&quot;
+    // Rifle.call(this, name. ammo);  // 当然你也可以这样写
+    this.clip = clip || 0;
+}
+// 继承父类的 &quot;静态变量&quot; 和 &quot;方法&quot;
+function extend(sub, sup) {
+    sub.prototype = Object.create(sup.prototype);
+    sub.prototype.constructor = sub;
+}
+extend(Negev, Rifle);
+Negev.prototype.reload = function() {
+    console.log(this.name + &#39;: reloading&#39;);
+};
+</code></pre>
+<p>总结一下 :</p>
+<ol>
+<li>子类构造函数内调用父类构造方法 , 但是绑定了子类的上下文<br>这么做直接导致了父类在使用 <code>this.xxx = xxx</code> 的时候 , 所有的字段都被子类给 <strong>“继承”</strong> 了</li>
+<li><code>extend()</code> 方法把父类原型链的内容搬过来 , 再恢复子类的构造器</li>
+<li>切记<strong>不要</strong>直接这样赋值 <code>sub.prototype = sup.prototype;</code> 这样你更新子类原型链的时候<strong>父类的原型链也会跟着改变</strong> , 这还得了 ? ( 为什么会改变 , 因为这两个变量指向的是同一个对象 ) ; <code>Object.create()</code> 的出现就是为了解决这个问题; <code>Object.create()</code> 相当于</li>
+</ol>
+<pre><code class="javascript">function create(obj) {
+    function Temp() {};
+    Temp.prototype = obj;
+    return new Temp();
+}
+/* 干了什么 : 复制了一份 obj */
+</code></pre>
+<p>这样子 prototype 就不会影响到父 prototype 了</p>
+<p>测试一啵</p>
+<pre><code class="javascript">var negev = new Negev(&#39;negev&#39;, 150, [&#39;哒哒哒&#39;, &#39;哒哒&#39;], 3);
+var rifle = new Rifle(&#39;rifle&#39;, 25, [&#39;biu~&#39;, &#39;biu~~~~&#39;]);
+
+console.log(&#39;negev instanceof Rifle ===&#39;, negev instanceof Rifle);  // true
+console.log(&#39;negev instanceof Negev ===&#39;, negev instanceof Negev);  // true
+console.log(&#39;Negev.prototype&#39;, Negev.prototype);
+console.log(&#39;Rifle.prototype&#39;, Rifle.prototype);
+Negev.prototype.asd = &#39;asd&#39;;
+console.log(&#39;Negev.prototype&#39;, Negev.prototype);
+console.log(&#39;Rifle.prototype&#39;, Rifle.prototype);
+</code></pre>
+<p>结果</p>
+<p><strong>完了</strong></p>
+ -->
+        <p>吧啦吧啦记录一下</p>
+      </div>
+    </article>
+  
+    <article class="post">
+      <h4>
+        <a class="post-title-link" href="/20190415/月总结/">
+            月总结
+        </a>
+      </h4>
+        <div class="post-meta text-secondly">
+            
+          <span class="post-time">2019-04-15</span>
+        </div>
+      <div class="post-content fmt">
+        <!-- <h3 id="2月月总结："><a href="#2月月总结：" class="headerlink" title="2月月总结："></a>2月月总结：</h3><p>开始迷忙期，一停下来，就不知道自己该干什么。<br>我的计划是在他们的计划中，不管怎么样，一定要让自己忙起来，忙起来就不会迷茫了。<br>学习了关于套价方面的知识，觉得自己真的好需要学习，真的还需要很多的知识。<br>自己迷茫，说明自己没有良好的心里素质。<br>需要的是磨练和学习。<br>上司要求我编制某工程资料清单，计算某更改图纸的工程量。<br>这是一个细心的活。<br>需要的是耐性，注意的是细节。<br>细节决定成败，而心态决定了细节。<br>工作做事最需要的是你的态度。<br>整理资料，做资料分析就需要脑灵心灵手灵。<br>这些很容易因为一那么不小心而出错。<br>做事不能太马虎，一定要心细。<br>和家人一起度过了新春佳节，感到的是浓浓的亲情。<br>为了父母为了关心我的心，为了让他们少操心，自己需要长大，要成熟。<br>也实习那么久了，感觉自己在那么短暂的时间里长大了不少，当然学习到了更多，学会了怎么工作，学会了怎么学习，学会了怎么去调节自己的状态。<br>这一个月里，大多时间都是休闲状态，整天胡思乱想。<br>想自己，想父母，想现在，想未来。<br>越想越觉得迷茫。<br>人不能依靠别人，只有自己才最可靠。<br>自由自己独立自强了，才会活得自在活得从容。<br>即使阴云密布，即使雾霭重重，也不能让自己的心里缺少美丽的阳光。</p>
+<h3 id="3月月总结："><a href="#3月月总结：" class="headerlink" title="3月月总结："></a>3月月总结：</h3><p>这个月注定是忙碌的，这个月注定是疲惫的。<br>身心疲惫的感觉让人难受，快要窒息的感觉不断的袭来。<br>但要相信阳光就在那里，你要有发现阳光，发现美的能力。<br>为了新的挑战，为了能够把所学的东西有一个施展的舞台。<br>我不断的在网上投递简历，每天在网上收集各种招聘信息。<br>有时感觉好累，感觉很没用，感觉自己啥都不是。<br>等待，不断地等待，等待的日子是煎熬的是苦闷的。<br>不断的找工作，全身心的投入，终于收到了回音。<br>那一刻有种重获新生的感觉，真的只想对自己说“你辛苦了”。<br>收到了面试通知，感觉还不错，也是就做好各种准备。<br>回顾上学期的实习经历，回顾自己学校的日子。<br>那天去参加了面试，面试问题对我而言不是什么问题，对自己还挺有信心的，毕竟自己也不是白学也不是混过来的。<br>果不其然，我面试成功了，通知去上班。<br>新的生活环境，新的工作环境。<br>给我的要求也是不一样的，而我需要的就是满腔的热情和积极的态度。<br>学习不断的学习，努力不断的努力。<br>赶快适应，尽快上手，这是我对自己也是公司的要求。<br>在这里做资料员，做资料整理，做资料分析。<br>考验的还是人的耐性和细心。<br>我明白了很多。<br>做事就得全身心的投入，把工作看得比什么都重要，上班时候就只能想工作的事情。<br>不能让其他杂事影响工作。<br>就算再累，就算再烦也要有好的心情。<br>任何时候都不能丢了好心情。</p>
+<h3 id="4月月总结："><a href="#4月月总结：" class="headerlink" title="4月月总结："></a>4月月总结：</h3><p>在工作中少问为什么，少些借口，少些抱怨，多做事少说话，多为公司的利益着想，不要为了蝇头小利而丢掉做事的原则！<br>在新的工作环境下工作十几天里，学到了很多，知道了很多不足，知道了还需要学习很多东西。知道了为人处事之道，学习了人际交往的技能，更重要的是，经历这些自己又长大了，又向前迈进了坚实的一大步！<br>每天和我的同事做资料整理，资料分析，有时还跟他们一起出去送取相关的文件，感觉很累很疲惫。但过得还挺充实，有自己合理的计划，每天下班后都是按计划做着，每天过得累但快乐着。<br>这是正式的工作，给我的学习时间很少，我必须在最短的时间里学会一些必须掌握的东西。同事们做事的态度很是激励我，他们很有专业素质，他们对工作兢兢业业，有很强的敬业精神。工作需要学习，工作也是学习，工作和学习本是一体，没了谁都不会过得很好。向同事们学习，他们有很多值得我们学习的地方。这这里你需要学习的东西实在是太多了。生活也是学习，学习好了生活也就会好。这份工作需要的是细心，每时每刻我都得必须注意细节问题。工作学习生活之中不断的培养自己细腻的心。每天都有阳光，阳光自己可以拥有，微笑就是最好的阳光，每天对自己笑笑，给自己加油。</p>
+<h3 id="5月月总结："><a href="#5月月总结：" class="headerlink" title="5月月总结："></a>5月月总结：</h3><p>实习的日子真是很快，瞬间来到了美丽的五月，这也是我们的毕业季。意味着很多，我们已经长大，也必须长大.跟同事们处得不错，工作上也做得不错，当然也有不足之处，需要的是不断的进步，不断的超越。跟同事去广州地税局办事过，去施工工地近距离的勘察过，还有很多。<br>最让我记忆深刻的就是，去外地办事来回奔波的疲惫。<br>有时感觉时间不够用，有时感觉时间太过漫长。<br>需要努力的还有很多，工作之中疲劳是在所难免的，而自身的及时调节又是必须的。<br>身在职场应该有一颗坚强的心。<br>无论遇到什么困难，无论身处何种境地都要保持冷静与睿智。<br>无论遭受怎么样的打击，无论遭受何种挫折都要坚强起来，绝不能让自己垮下去，一定要振作起来。<br>工作是生活的一部分，也是生活最最重要的一部分。<br>所以要善待工作，不能跟工作闹情绪，不能随意发脾气。<br>任何时候都要保持对工作的新奇，都要保持对工作的的热情。<br>这段时间总是很忙乱，工作量不断加大，所遇到的困难也越来越有挑战性，我也喜欢挑战性的工作。<br>生活也忙整天东忙西忙的，感觉头很大了。<br>无论再怎么样都要保持平衡，在生活学习工作之间找到平衡，只有找到平衡也才会过得从容和自在。<br>合理的规划自己的生活，把自己的事情做得井井有条，任何事都要用心的去做，不管事情的大小，态度是一样的。<br>学习再学习，为了工作而学习，为了进步而学习。<br>学习细节，培样良好的做事处事风格，无论怎么样都要坚强，都不要放弃！</p>
+<p>##实训总结<br>通过这次实训，我收获了很多，一方面学习到了许多以前没学过的专业知识与知识的应用，另一方面还提高了自己动手做项目的能力。本次实训，是对我能力的进一步锻炼，也是一种考验。从中获得的诸多收获，也是很可贵的，是非常有意义的。</p>
+<p>在实训中我学到了许多新的知识。是一个让我把书本上的理论知识运用于实践中的好机会，原来，学的时候感叹学的内容太难懂，现在想来，有些其实并不难，关键在于理解。</p>
+<p>在这次实训中还锻炼了我其他方面的能力，提高了我的综合素质。首先，它锻炼了我做项目的能力，提高了独立思考问题、自己动手操作的能力，在工作的过程中，复习了以前学习过的知识，并掌握了一些应用知识的技巧等。其次，实训中的项目作业也使我更加有团队精神。</p>
+<p>从那里，我学会了下面几点找工作的心态：</p>
+<p><strong>一、继续学习，不断提升理论涵养。</strong></p>
+<p>在信息时代，学习是不断地汲取新信息，获得事业进步的动力。作为一名青年学子更应该把学习作为保持工作积极性的重要途径。走上工作岗位后，我会积极响应单位号召，结合工作实际，不断学习理论、业务知识和社会知识，用先进的理论武装头脑，用精良的业务知识提升能力，以广博的社会知识拓展视野。</p>
+<p><strong>二、努力实践，自觉进行角色转化。</strong></p>
+<p>只有将理论付诸于实践才能实现理论自身的价值，也只有将理论付诸于实践才能使理论得以检验。同样，一个人的价值也是通过实践活动来实现的，也只有通过实践才能锻炼人的品质，彰显人的意志。必须在实际的工作和生活中潜心体会，并自觉的进行这种角色的转换。  </p>
+<p><strong>三、提高工作积极性和主动性</strong></p>
+<p>实习，是开端也是结束。展现在自己面前的是一片任自己驰骋的沃土，也分明感受到了沉甸甸的责任。在今后的工作和生活中，我将继续学习，深入实践，不断提升自我，努力创造业绩，继续创造更多的价值。</p>
+<p>我认为大学生实习难，就业难，除非你有关系，能给你轻松找到工作，否则就难逃市场选择的厄运。我在该公司实习总结了五个攻略，只能智勇双全，才能在这个社会中出人头地。</p>
+<ol>
+<li><p><strong>宜主动出击</strong>：找实习岗位和找工作一样，要讲究方法。公司一般不会对外公布实习机会，可以主动和其人力资源部门联系，主动争取实习机会。可特别留意正在招聘人选的公司，说明其正缺乏人手，在没有招到合适的员工的情况下，很有可能会暂时选择实习生替代。</p>
+</li>
+<li><p><strong>宜知己知彼</strong>：求职信和求职电话要稳、准、狠，即稳当地了解公司所处的行业大背景及所申请岗位的要求，准确地阐述自己的竞争力，自信自己就是对方要找的人；同时很诚恳地表现出低姿态，表示实习的热望和决心。此外，规范的简历，良好的面试技巧都有助于提高实习成功率。</p>
+</li>
+<li><p><strong>宜避热趋冷</strong>：寻找实习单位时，宜避开热门的实习单位和实习发布网站，勇于找冷门公司，回避热点信息和实习高峰期，实习成功的可能性反而更大。</p>
+</li>
+<li><p><strong>忌免费午餐</strong>：实习生与实习单位之间是双赢关系，主动跟对方说我不要钱来干活是很糟糕的开始，说明自己缺乏自信。有价值的付出一定要有价值的回报，不存在施舍性的实习岗位，能够为雇主创造价值的实习生才是对方所需，而理性考虑到实习生价值的单位会给予实习生更多的锻炼机会。</p>
+</li>
+<li><p><strong>忌盲目实习</strong>：未来求职拼的是专业度而不是态度。谋职实习不应是简单的劳动经验积累和态度培养，比如端盘子一类的工作，可能会增加挫折体验；与专业不对口的实习在未来求职竞争时含金量很低，从找工作的角度，这样的实习弊大于利。</p>
+</li>
+</ol>
+<p>实际上，实习只是接触社会的一个过程，大学生实习的目的应该是为了自己日后的发展，而不仅仅是累计工作经验，然后帮助找到一个薪水较高的工作而已。</p>
+<p>在实习中，我严格按照实习规程进行操作。做为一名初出茅庐的普通大学生，我不会放松对自己的要求，我希望用自己一开始的学习热情来对待日后的每一项任务工作。在这次毕业实习期间，虽然经常感到很苦，很累，但苦中有乐，累中有趣，也都表现的非常地积极努力认真。</p>
+<p>这次实习内容主要就是机器维修工作，但我获益不浅，感慨良多。我感受最深的，有如下几点：</p>
+<p> 其一，实习是个人综合能力的检验。要想优秀完成工作，除了办公室基础知识功底深厚外，还需有一定的实践动手能力，操作能力，应付突发故障的能力，还要对办公室中常用软件都能熟练操作。作为一名工作人员，还要求有较强的表达能力，同时还要善于引导自己思考、调节与人相处的氛围等。另外，还必须有较强的应变能力、组织管理能力和坚强的毅力。</p>
+<p> 其二，此次实习，我深深体会到了积累知识的重要性。俗话说：要给学生一碗水，自己就得有一桶水。我对此话深有感触。以往觉得很容易操作的office，但我的师父要求我完成某次产品统计的数据与记录时，我却一头雾水，感觉和平时计算机课堂中学的完全不一样，这也让我感到巨大的惭愧。因为以前的自己总以为这些东西学不学得好与专业没有多大联系，殊不知工作不是专攻一个方面，而是考察我们的综合知识水平。</p>
+<p>此次实习增强了我毕业就业的信心和勇气。这次实习，我觉得我表现得还不错，许多同学都认为，自己以后进入企业都是可以胜任的。由此看来，我们在大学里还是学到了不少东西，只是感觉不到而已。所以，我们有就业危机感是应该的，但不能过于自卑和担忧，否则会妨碍自己的学习。现在，我们能做的就是多吸取知识，提高自身的综合素质</p>
+<p>可以说这次实训不仅使我学到了知识，丰富了经验。也帮助我缩小了实践和理论的差距。这次实训将会有利于我更好的适应以后的工作。我会把握和珍惜实训的机会，在未来的工作中我会把学到的理论知识和实践经验不断的应用到实际工作中，为实现理想而努力。最后，我要感谢学院组织的这次十分有意义的实训，使我们学到了很多，也领悟了很多</p>
+ -->
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <h4>
+        <a class="post-title-link" href="/20190415/MQ/">
+            MQ
+        </a>
+      </h4>
+        <div class="post-meta text-secondly">
+            
+          <span class="post-time">2019-04-15</span>
+        </div>
+      <div class="post-content fmt">
+        <!-- <h2 id="MQ-消息队列有什么优缺点"><a href="#MQ-消息队列有什么优缺点" class="headerlink" title="MQ 消息队列有什么优缺点"></a>MQ 消息队列有什么优缺点</h2><p>消息队列有什么优缺点优点上面已经说了，就是在特殊场景下有其对应的好处，<strong>解耦</strong>、<br><strong>异步</strong>、<strong>削峰</strong>。</p>
+<p>缺点有以下几个：</p>
+<ol>
+<li><strong>系统可用性降低</strong><br>系统引入的外部依赖越多，越容易挂掉。<br>本来你就是 A 系统调用 BCD 三个系统的接口就好了，人 ABCD 四个系统好好的，没<br>啥问题，你偏加个 MQ 进来，万一 MQ 挂了咋整，MQ 一挂，整套系统崩溃的，你不就<br>完了？</li>
+</ol>
+<ol start="2">
+<li><p><strong>系统复杂度提高</strong><br>硬生生加个 MQ 进来，你怎么保证消息没有重复消费？怎么处理消息丢失的情况？怎么<br>保证消息传递的顺序性？头大头大，问题一大堆，痛苦不已。</p>
+</li>
+<li><p><strong>一致性问题</strong><br>A 系统处理完了直接返回成功了，人都以为你这个请求就成功了；但是问题是，<br>要是 BCD 三个系统那里，BD 两个系统写库成功了，结果 C 系统写库失败了，咋整？<br>你这数据就不一致了。所以消息队列实际是一种非常复杂的架构，你引入它有很多好处，<br>但是也得针对它带来的坏处做各种额外的技术方案和架构来规避掉，做好之后，你会发现，<br>妈呀，系统复杂度提升了一个数量级，也许是复杂了 10 倍。但是关键时刻，用，还是得用的。</p>
+</li>
+</ol>
+ -->
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <h4>
+        <a class="post-title-link" href="/20190413/css/">
+            CSS 里 `width: 100% \9;` 这种写法是什么意思
+        </a>
+      </h4>
+        <div class="post-meta text-secondly">
+            
+                <a class="tag" href="/tags/我爱黎明/">我爱黎明</a>
+            
+                <a class="tag" href="/tags/CSS/">CSS</a>
+            
+          <span class="post-time">2019-04-13</span>
+        </div>
+      <div class="post-content fmt">
+        <!-- <h3 id="CSS-里-width-100-9-这种写法是什么意思"><a href="#CSS-里-width-100-9-这种写法是什么意思" class="headerlink" title="CSS 里 width: 100% \9; 这种写法是什么意思"></a>CSS 里 <code>width: 100% \9;</code> 这种写法是什么意思</h3><p><strong>据说是这么个意思 = =</strong></p>
+<pre><code class="css">.color {
+    color: red;  // 一般浏览器识别，字体颜色为红
+    color: blue \9;  // IE8,IE9及以上版本识别，字体颜色为蓝
+    *color: orange;  // IE7识别，字体颜色为橘色
+    _color: black;  //  IE6识别，颜色为黑
+}
+
+//顺序不能反过来，因为后面识别的会覆盖前面识别的 (**就近原则**云云)
+</code></pre>
+<hr>
+<p>这是专门针对 ie 的 hack 写法<br><code>\9</code>    在 <code>IE6/IE7/IE8/IE9/IE10</code> 生效<br><code>\0</code>    在 <code>IE8/IE9/IE10下</code> 生效<br><code>\9\0</code>  在 <code>IE9/IE10下</code> 生效</p>
+ -->
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <h4>
+        <a class="post-title-link" href="/20190413/goodlooking/">
+            goodlooking
+        </a>
+      </h4>
+        <div class="post-meta text-secondly">
+            
+          <span class="post-time">2019-04-13</span>
+        </div>
+      <div class="post-content fmt">
+        <!-- <pre><code class="css">button.danger {
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+button.danger:hover {
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+button.primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+button.primary:hover {
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
+}
+button:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}
+button {
+    color: #333;
+    background-color: #fff;
+    display: inline-block;
+    padding: 6px 12px;
+    /*margin-bottom: 0;*/
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+</code></pre>
+<p>1、用滚动插件<br>2、只是谷歌可以用::-webkit-scrollbar 等专有属性优化或者隐藏<br>3、外面套多一个div，overflow:hidden的。。。固定宽度高度的<br>滚动条一般在15-20之间。。滚动的div多出20px就可以了。。</p>
+<pre><code>#F44336, #FF9800, #FFEB3B, #4CAF50, #2196F3, #3F51B5, #9C27B0
+text-shadow: 2px 2px 10px #000;
+box-shadow: 0 15px 35px rgba(50, 50, 93, .1), 0 5px 15px rgba(0, 0, 0, .07);
+</code></pre><pre><code class="javascript">function rgb2hex(r, g, b) {
+    return &#39;#&#39; + ((1 &lt;&lt; 24) + (r &lt;&lt; 16) + (g &lt;&lt; 8) + b)
+        .toString(16) // 先转成十六进制，然后返回字符串
+        .substr(1);   // 去除字符串的最高位，返回后面六个字符串
+}
+
+function hex2rgb(hex) {
+    return &#39;rgb(&#39;
+        + hex &gt;&gt; 16 &amp; 0xff + &#39;, &#39;
+        + hex &gt;&gt; 8 &amp; 0xff + &#39;, &#39;
+        + hex + &#39;)&#39;;
+}
+
+function colorRandom() {
+    return &#39;#&#39; + (0xffffff + ((Math.random() * 0xffffff) | 0))
+        .toString(16).substr(1);
+}
+
+// 返回两数之间的值
+function random(min, max) {
+    if(&quot;number&quot; !== (typeof max)) {
+        max = 0;
+    }
+    return Math.random() * (max - min) + min;
+}
+
+function getSign(num){
+    if(&quot;number&quot; === (typeof num)) {
+        return num &lt; 0 ? -1 : 1;
+    } else {
+        return getSign(random(-1, 1));
+    }
+}
+
+function toAngle(arc) {
+    return arc * (Math.PI/180);
+}
+
+function toArc(angle) {
+    return angle / (Math.PI/180);
+}
+
+
+/* fake_click */
+    function export_raw(name, blob) {
+        // name=文件名, blob=文件二进制对象
+        var urlObject = window.URL || window.webkitURL || window;
+        var save_link = document.createElementNS(&quot;http://www.w3.org/1999/xhtml&quot;, &quot;a&quot;)
+        save_link.href = urlObject.createObjectURL(blob);
+        save_link.download = name;
+        fake_click(save_link);
     }
 
+    function fake_click(obj) {
+        var ev = document.createEvent(&quot;MouseEvents&quot;);
+        ev.initMouseEvent(
+            &quot;click&quot;, true, false, window, 0, 0, 0, 0, 0
+            , false, false, false, false, 0, null
+        );
+        obj.dispatchEvent(ev);
+    }
+</code></pre>
+<pre><code>/* 盲文 */
+</code></pre><p>⠁⠁⠂⠃⠄⠅⠆⠇<br>⡀⡁⡂⡃⡄⡅⡆⡇<br>⠈⠉⠊⠋⠌⠍⠎⠏<br>⡈⡉⡊⡋⡌⡍⡎⡏<br>⠐⠑⠒⠓⠔⠕⠖⠗<br>⡐⡑⡒⡓⡔⡕⡖⡗<br>⠘⠙⠚⠛⠜⠝⠞⠟<br>⡘⡙⡚⡛⡜⡝⡞⡟<br>⠠⠡⠢⠣⠤⠥⠦⠧<br>⡠⡡⡢⡣⡤⡥⡦⡧<br>⠨⠩⠪⠫⠬⠭⠮⠯<br>⡨⡩⡪⡫⡬⡭⡮⡯<br>⠰⠱⠲⠳⠴⠵⠶⠷<br>⡰⡱⡲⡳⡴⡵⡶⡷<br>⠸⠹⠺⠻⠼⠽⠾⠿<br>⡸⡹⡺⡻⡼⡽⡾⡿<br>⢀⢁⢂⢃⢄⢅⢆⢇<br>⣀⣁⣂⣃⣄⣅⣆⣇<br>⢈⢉⢊⢋⢌⢍⢎⢏<br>⣈⣉⣊⣋⣌⣍⣎⣏<br>⢐⢑⢒⢓⢔⢕⢖⢗<br>⣐⣑⣒⣓⣔⣕⣖⣗<br>⢘⢙⢚⢛⢜⢝⢞⢟<br>⣘⣙⣚⣛⣜⣝⣞⣟<br>⢠⢡⢢⢣⢤⢥⢦⢧<br>⣠⣡⣢⣣⣤⣥⣦⣧<br>⢨⢩⢪⢫⢬⢭⢮⢯<br>⣨⣩⣪⣫⣬⣭⣮⣯<br>⢰⢱⢲⢳⢴⢵⢶⢷<br>⣰⣱⣲⣳⣴⣵⣶⣷<br>⢸⢹⢺⢻⢼⢽⢾⢿<br>⣸⣹⣺⣻⣼⣽⣾⣿</p>
+<p>⠁⠁⠂⠃⠄⠅⠆⠇⡀⡁⡂⡃⡄⡅⡆⡇⠈⠉⠊⠋⠌⠍⠎⠏⡈⡉⡊⡋⡌⡍⡎⡏⠐⠑⠒⠓⠔⠕⠖⠗⡐⡑⡒⡓⡔⡕⡖⡗⠘⠙⠚⠛⠜⠝⠞⠟⡘⡙⡚⡛⡜⡝⡞⡟⠠⠡⠢⠣⠤⠥⠦⠧⡠⡡⡢⡣⡤⡥⡦⡧⠨⠩⠪⠫⠬⠭⠮⠯⡨⡩⡪⡫⡬⡭⡮⡯⠰⠱⠲⠳⠴⠵⠶⠷⡰⡱⡲⡳⡴⡵⡶⡷⠸⠹⠺⠻⠼⠽⠾⠿⡸⡹⡺⡻⡼⡽⡾⡿⢀⢁⢂⢃⢄⢅⢆⢇⣀⣁⣂⣃⣄⣅⣆⣇⢈⢉⢊⢋⢌⢍⢎⢏⣈⣉⣊⣋⣌⣍⣎⣏⢐⢑⢒⢓⢔⢕⢖⢗⣐⣑⣒⣓⣔⣕⣖⣗⢘⢙⢚⢛⢜⢝⢞⢟⣘⣙⣚⣛⣜⣝⣞⣟⢠⢡⢢⢣⢤⢥⢦⢧⣠⣡⣢⣣⣤⣥⣦⣧⢨⢩⢪⢫⢬⢭⢮⢯⣨⣩⣪⣫⣬⣭⣮⣯⢰⢱⢲⢳⢴⢵⢶⢷⣰⣱⣲⣳⣴⣵⣶⣷⢸⢹⢺⢻⢼⢽⢾⢿⣸⣹⣺⣻⣼⣽⣾⣿</p>
+<pre><code>[&#39;log&#39;, &#39;info&#39;, &#39;warn&#39;, &#39;error&#39;].forEach(function(method) {
+    console[method] = console[method].bind(
+        console,
+        new Date().toISOString()
+    );
+});
 
-  </script>
-</body>
+// getCharFromCharCode
+(function() {
+    document.writeln(&quot;&lt;style&gt;span:hover{background-color:ff0;}&lt;/style&gt;&quot;);
+    for(var i = -1000; i &lt; 10000; i++) {
+        if(i%60 === 0) {
+            document.writeln(&quot;&lt;br&gt;&quot;);
+        }
+        document.write(&#39;&lt;span title=&quot;&#39; + i + &#39;&quot;&gt;&#39;
+            + String.fromCharCode(i) + &#39;&lt;/span&gt;&#39;);
+    }
+})();
+</code></pre><p>░░░░░░░█▐▓▓░████▄▄▄█▀▄▓▓▓▌███<br>░░░░░▄█▌▀▄▓▓▄▄▄▄▀▀▀▄▓▓▓▓▓▌███<br>░░░▄█▀▀▄▓█▓▓▓▓▓▓▓▓▓▓▓▓▀░▓▌███<br>░░█▀▄▓▓▓███▓▓▓███▓▓▓▄░░▄▓▐███<br>░█▌▓▓▓▀▀▓▓▓▓███▓▓▓▓▓▓▓▄▀▓▓▐██<br>▐█▐██▐░▄▓▓▓▓▓▀▄░▀▓▓▓▓▓▓▓▓▓▌██<br>█▌███▓▓▓▓▓▓▓▓▐░░▄▓▓███▓▓▓▄▀▐█<br>█▐█▓▀░░▀▓▓▓▓▓▓▓▓▓██████▓▓▓▓▐█<br>▌▓▄▌▀░▀░▐▀█▄▓▓██████████▓▓▓▌█<br>▌▓▓▓▄▄▀▀▓▓▓▀▓▓▓▓▓▓▓▓█▓█▓█▓▓▌█<br>█▐▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓█▓█▓█▓█▓▓▓▐█</p>
+<p>███▐▓▓▓▄▀█▄▄▄████░▓▓▌█░░░░░░░<br>███▐▓▓▓▓▓▄▀▀▀▄▄▄▄▓▓▄▀▐█▄░░░░░<br>███▐▓░▀▓▓▓▓▓▓▓▓▓▓▓▓█▓▄▀▀█▄░░░<br>███▌▓▄░░▄▓▓▓███▓▓▓███▓▓▓▄▀█░░<br>██▌▓▓▀▄▓▓▓▓▓▓▓███▓▓▓▓▀▀▓▓▓▐█░<br>██▐▓▓▓▓▓▓▓▓▓▀░▄▀▓▓▓▓▓▄░▌██▌█▌<br>█▌▀▄▓▓▓███▓▓▄░░▌▓▓▓▓▓▓▓▓███▐█<br>█▌▓▓▓▓██████▓▓▓▓▓▓▓▓▓▀░░▀▓█▌█<br>█▐▓▓▓██████████▓▓▄█▀▌░▀░▀▐▄▓▐<br>█▐▓▓█▓█▓█▓▓▓▓▓▓▓▓▀▓▓▓▀▀▄▄▓▓▓▐<br>█▌▓▓▓█▓█▓█▓█▓▓▓▓▓▓▄▄▄▓▓▓▓▓▓▌█</p>
+<p>░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░<br>░█░█░█▀█░█▀█░█▀█░█░█░░█▀▄░█▀▀░█░█░█░░█░█░█▀▀░█▀█░█▀█░█░<br>░█▀█░█▀█░█▀▀░█▀▀░▀█▀░░█░█░█▀▀░█░█░█░░▀█▀░█▀▀░█▀█░█▀▄░▀░<br>░▀░▀░▀░▀░▀░░░▀░░░░▀░░░▀░▀░▀▀▀░░▀░▀░░░░▀░░▀▀▀░▀░▀░▀░▀░▀░<br>░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░</p>
+<p>⠁⠁⠁⠁⠁⠁⠁⢀⣀⡀⠁⠁⡠⠐⠒⠒⠢⢄⠁⠁⠁⠁⠁⠁<br>⠁⠁⠁⠁⢀⣔⣈⣀⠁⢈⠱⠖⠒⠒⠒⠒⠤⡀⠙⢦⠁⠁⠁⠁<br>⠁⣀⠴⠭⠤⠤⢄⢀⢝⡓⠴⠶⢒⣒⠠⢀⠁⠁⠁⠁⠇⠁⠁⠁<br>⠮⠐⣩⣭⡍⠉⠐⡃⠁⣠⣶⣦⠁⠁⠉⢒⠂⠁⠁⠁⢸⠁⠁⠁<br>⡇⠁⣏⣹⡿⠁⠁⡄⠁⣿⣈⣿⠃⠁⡐⡁⠁⠁⠁⠁⠘⠱⡀⠁<br>⠘⡦⠭⠭⠄⣒⠥⠓⡦⢌⠉⠥⠔⡨⠊⠁⠁⠁⠁⠁⠁⠁⢱⠁<br>⠁⢈⠫⢍⣀⡐⠁⠁⠈⠒⠲⠬⠥⠁⠒⠈⠁⠁⠠⢄⠁⠁⠁⡆<br>⢠⣌⡀⠁⠰⠁⠁⠁⠁⠁⠁⠁⢀⣠⣤⣶⣾⣿⡷⠄⠁⠁⠁⠇<br>⠘⢽⣾⣵⣶⣶⣶⣶⣶⣶⣿⡿⣿⠻⠿⠛⡩⣻⡟⠁⠁⠁⠸⠁<br>⢀⢀⣺⡯⠃⠛⠺⠛⠁⠉⠉⡡⠄⡲⣶⡾⡿⠏⠁⠁⠁⡠⠁⠁<br>⠃⢸⣿⣣⣤⢀⣰⣤⣤⢴⣭⣶⡻⣟⠿⠋⠁⠁⠁⢀⠔⠁⠁⠁<br>⠁⠈⠻⠿⢿⠟⠿⠿⠿⠿⠛⠋⠉⠁⠁⠁⠁⣀⠔⠁⠁⠁⠁⠁<br>⠁⠁⠁⠁⠁⠉⠒⠤⠤⠤⠤⠄⠤⠤⠤⠒⠉⠁⠁⠁⠁⠁⠁⠁</p>
+<pre><code class="javascript">// domain(arr, index)
+function mirrorString(str, domain, option) {
+    if((typeof str) === &quot;undefined&quot;) {
+        console.error(&quot;not a String&quot;);
+        return &quot;&quot;;
+    }
+    domain = domain || console.log;
+    var strArr = str.split(&quot;\n&quot;);
+    strArr.forEach(function(item, index, arr) {
+        arr[index] = item.split(&quot;&quot;).reverse().join(&quot;&quot;);
+        domain(arr, index);
+    });
+    return strArr.join(&quot;\n&quot;);
+}
 
+String.prototype.replaceAll = function (f, e) {
+    return this.replace(new RegExp(f, &quot;g&quot;), e);
+};
+
+String.prototype.swap = function (a, b) {
+    var tag = &quot;###&quot;;
+    var newVal = &quot;&quot;;
+    // mark
+    newVal = this.replaceAll(a, tag + a);
+    newVal = newVal.replaceAll(b, tag + b);
+    // swap
+    newVal = newVal.replaceAll(tag + a, b);
+    newVal = newVal.replaceAll(tag + b, a);
+    return newVal;
+}
+
+function domain(arr, index) {
+    arr[index] = arr[index].swap(&quot;▌&quot;, &quot;▐&quot;);
+}
+</code></pre>
+<p>(function() {<br>    var imgs = document.querySelectorAll(‘img’);<br>    var className = ‘click’;<br>    document.write(‘<style> img{ transition: .3s; width:25%;} img.’ + className + ‘{width: 100%;}</style>‘);<br>    for(var i = 0; i &lt; imgs.length; i++) {<br>      if(imgs[i].src) {<br>        document.write(‘&lt;img onclick=”this.classList.contains(‘ + className + ‘)\<br>                               ? this.classList.remove(‘ + className + ‘)\<br>                               : this.classList.add(‘ + className + ‘);”\<br>                             src=”‘ + imgs[i].src + ‘“&gt;’);<br>      }<br>    }<br>})();</p>
+<p>// 拿到帖子的图片 ( 当前页 )<br>document.querySelectorAll(‘img.BDE_Image’).forEach(function(t, i, arr) { document.write(‘<img src="' + t.src + '">‘) });</p>
+<p>// 大图页 1<br>(function(selector, replace) {<br>    var imgs = document.querySelectorAll(selector);<br>    document.write(‘<style> img{width:20%;}</style>‘);<br>    for(var i = 0; i &lt; imgs.length; i++) {<br>        if(imgs[i].src) {<br>          var img = document.createElement(‘img’);<br>          img.src = imgs[i].src.replace(replace[0], replace[1]);<br>          img.onload = function() {<br>            document.body.append(this);<br>          };<br>      }<br>    }<br>})(‘#dt-bp-tab-nav &gt; div &gt; ul &gt; li.tab-trigger &gt; div &gt; a &gt; img’, [‘.64x64.jpg’, ‘.jpg’]);</p>
+<p>// 详情页<br>(function(selector) {<br>    var imgs = document.querySelectorAll(selector);<br>    document.body.innerHTML = (‘<style> img{width:20%;}</style>‘);<br>    for(var i = 0; i &lt; imgs.length; i++) {<br>      if(imgs[i].src) {<br>          var img = document.createElement(‘img’);<br>          img.src = imgs[i].src;<br>          img.onload = function() {<br>            document.body.append(this);<br>          };<br>      }<br>    }<br>})(‘#desc-lazyload-container &gt; div &gt; img’);</p>
+<p>(function(selector, callback) {<br>    var els = document.querySelectorAll(selector);<br>    var history = [];<br>    for(var i = 0; i &lt; els.length; i++) {<br>      callback(els, i, els);<br>    }<br>})(‘#desc-lazyload-container &gt; div &gt; img’, function(t, i, ts) {<br>    console.log(i);<br>});</p>
+ -->
+        
+      </div>
+    </article>
+  
+    <article class="post">
+      <h4>
+        <a class="post-title-link" href="/20190329/痛苦啵堪/">
+            痛苦啵堪
+        </a>
+      </h4>
+        <div class="post-meta text-secondly">
+            
+          <span class="post-time">2019-03-29</span>
+        </div>
+      <div class="post-content fmt">
+        <!-- <p>痛苦啵堪<br><img src="/favicon.png" alt="痛苦啵堪"><br><a id="more"></a></p>
+ -->
+        <p>痛苦啵堪<br><img src="/favicon.png" alt="痛苦啵堪"><br>
+      </p></div>
+    </article>
+  
+    <article class="post">
+      <h4>
+        <a class="post-title-link" href="/20190329/md/">
+            我爱黎明
+        </a>
+      </h4>
+        <div class="post-meta text-secondly">
+            
+                <a class="tag" href="/tags/我爱黎明/">我爱黎明</a>
+            
+                <a class="tag" href="/tags/PyroHo/">PyroHo</a>
+            
+          <span class="post-time">2019-03-29</span>
+        </div>
+      <div class="post-content fmt">
+        <!-- <h3 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h3><ul>
+<li>支持“标准”Markdown / CommonMark和Github风格的语法，也可变身为代码编辑器；</li>
+<li>支持实时预览、图片（跨域）上传、预格式文本/代码/表格插入、代码折叠、搜索替换、只读模式、自定义样式主题和多语言语法高亮等功能；</li>
+<li>支持ToC（Table of Contents）、Emoji表情、Task lists、@链接等Markdown扩展语法；</li>
+<li>支持TeX科学公式（基于KaTeX）、流程图 Flowchart 和 时序图 Sequence Diagram;</li>
+<li>支持识别和解析HTML标签，并且支持自定义过滤标签解析，具有可靠的安全性和几乎无限的扩展性；</li>
+<li>支持 AMD / CMD 模块化加载（支持 Require.js &amp; Sea.js），并且支持自定义扩展插件；</li>
+<li>兼容主流的浏览器（IE8+）和Zepto.js，且支持iPad等平板设备；</li>
+<li>支持自定义主题样式；</li>
+</ul>
+<a id="more"></a>
+<h1 id="Editor-md"><a href="#Editor-md" class="headerlink" title="Editor.md"></a>Editor.md</h1><p><img src="https://pandao.github.io/editor.md/images/logos/editormd-logo-180x180.png" alt></p>
+<p><img src="https://img.shields.io/github/stars/pandao/editor.md.svg" alt> <img src="https://img.shields.io/github/forks/pandao/editor.md.svg" alt> <img src="https://img.shields.io/github/tag/pandao/editor.md.svg" alt> <img src="https://img.shields.io/github/release/pandao/editor.md.svg" alt> <img src="https://img.shields.io/github/issues/pandao/editor.md.svg" alt> <img src="https://img.shields.io/bower/v/editor.md.svg" alt></p>
+<p><strong>目录 (Table of Contents)</strong></p>
+<p>[TOCM]</p>
+<p>[TOC]</p>
+<h1 id="Heading-1"><a href="#Heading-1" class="headerlink" title="Heading 1"></a>Heading 1</h1><h2 id="Heading-2"><a href="#Heading-2" class="headerlink" title="Heading 2"></a>Heading 2</h2><h3 id="Heading-3"><a href="#Heading-3" class="headerlink" title="Heading 3"></a>Heading 3</h3><h4 id="Heading-4"><a href="#Heading-4" class="headerlink" title="Heading 4"></a>Heading 4</h4><h5 id="Heading-5"><a href="#Heading-5" class="headerlink" title="Heading 5"></a>Heading 5</h5><h6 id="Heading-6"><a href="#Heading-6" class="headerlink" title="Heading 6"></a>Heading 6</h6><h1 id="Heading-1-link-Heading-link"><a href="#Heading-1-link-Heading-link" class="headerlink" title="Heading 1 link Heading link"></a>Heading 1 link <a href="https://github.com/pandao/editor.md" title="Heading link" target="_blank" rel="noopener">Heading link</a></h1><h2 id="Heading-2-link-Heading-link"><a href="#Heading-2-link-Heading-link" class="headerlink" title="Heading 2 link Heading link"></a>Heading 2 link <a href="https://github.com/pandao/editor.md" title="Heading link" target="_blank" rel="noopener">Heading link</a></h2><h3 id="Heading-3-link-Heading-link"><a href="#Heading-3-link-Heading-link" class="headerlink" title="Heading 3 link Heading link"></a>Heading 3 link <a href="https://github.com/pandao/editor.md" title="Heading link" target="_blank" rel="noopener">Heading link</a></h3><h4 id="Heading-4-link-Heading-link-Heading-link-Heading-link"><a href="#Heading-4-link-Heading-link-Heading-link-Heading-link" class="headerlink" title="Heading 4 link Heading link Heading link Heading link"></a>Heading 4 link <a href="https://github.com/pandao/editor.md" title="Heading link" target="_blank" rel="noopener">Heading link</a> Heading link <a href="https://github.com/pandao/editor.md" title="Heading link" target="_blank" rel="noopener">Heading link</a></h4><h5 id="Heading-5-link-Heading-link"><a href="#Heading-5-link-Heading-link" class="headerlink" title="Heading 5 link Heading link"></a>Heading 5 link <a href="https://github.com/pandao/editor.md" title="Heading link" target="_blank" rel="noopener">Heading link</a></h5><h6 id="Heading-6-link-Heading-link"><a href="#Heading-6-link-Heading-link" class="headerlink" title="Heading 6 link Heading link"></a>Heading 6 link <a href="https://github.com/pandao/editor.md" title="Heading link" target="_blank" rel="noopener">Heading link</a></h6><h4 id="标题（用底线的形式）Heading-underline"><a href="#标题（用底线的形式）Heading-underline" class="headerlink" title="标题（用底线的形式）Heading (underline)"></a>标题（用底线的形式）Heading (underline)</h4><h1 id="This-is-an-H1"><a href="#This-is-an-H1" class="headerlink" title="This is an H1"></a>This is an H1</h1><h2 id="This-is-an-H2"><a href="#This-is-an-H2" class="headerlink" title="This is an H2"></a>This is an H2</h2><h3 id="字符效果和横线等"><a href="#字符效果和横线等" class="headerlink" title="字符效果和横线等"></a>字符效果和横线等</h3><hr>
+<p><del>删除线</del> <s>删除线（开启识别HTML标签时）</s><br><em>斜体字</em>      <em>斜体字</em><br><strong>粗体</strong>  <strong>粗体</strong><br><strong><em>粗斜体</em></strong> <strong><em>粗斜体</em></strong></p>
+<p>上标：X<sub>2</sub>，下标：O<sup>2</sup></p>
+<p><strong>缩写(同HTML的abbr标签)</strong></p>
+<blockquote>
+<p>即更长的单词或短语的缩写形式，前提是开启识别HTML标签时，已默认开启</p>
+</blockquote>
+<p>The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.</p>
+<h3 id="引用-Blockquotes"><a href="#引用-Blockquotes" class="headerlink" title="引用 Blockquotes"></a>引用 Blockquotes</h3><blockquote>
+<p>引用文本 Blockquotes</p>
+</blockquote>
+<p>引用的行内混合 Blockquotes</p>
+<blockquote>
+<p>引用：如果想要插入空白换行<code>即&lt;br /&gt;标签</code>，在插入处先键入两个以上的空格然后回车即可，<a href="http://localhost/" target="_blank" rel="noopener">普通链接</a>。</p>
+</blockquote>
+<h3 id="锚点与链接-Links"><a href="#锚点与链接-Links" class="headerlink" title="锚点与链接 Links"></a>锚点与链接 Links</h3><p><a href="http://localhost/" target="_blank" rel="noopener">普通链接</a></p>
+<p><a href="http://localhost/" title="普通链接带标题" target="_blank" rel="noopener">普通链接带标题</a></p>
+<p>直接链接：<a href="https://github.com" target="_blank" rel="noopener">https://github.com</a></p>
+<p><a href="http://www.this-anchor-link.com/" target="_blank" rel="noopener">锚点链接</a> </p>
+<p>GFM a-tail link @pandao</p>
+<blockquote>
+<p>@pandao</p>
+</blockquote>
+<h3 id="多语言代码高亮-Codes"><a href="#多语言代码高亮-Codes" class="headerlink" title="多语言代码高亮 Codes"></a>多语言代码高亮 Codes</h3><h4 id="行内代码-Inline-code"><a href="#行内代码-Inline-code" class="headerlink" title="行内代码 Inline code"></a>行内代码 Inline code</h4><p>执行命令：<code>npm install marked</code></p>
+<h4 id="缩进风格"><a href="#缩进风格" class="headerlink" title="缩进风格"></a>缩进风格</h4><p>即缩进四个空格，也做为实现类似<code>&lt;pre&gt;</code>预格式化文本(Preformatted Text)的功能。</p>
+<pre><code>&lt;?php
+    echo &quot;Hello world!&quot;;
+?&gt;
+</code></pre><p>预格式化文本：</p>
+<pre><code>| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+</code></pre><h4 id="JS代码"><a href="#JS代码" class="headerlink" title="JS代码　"></a>JS代码　</h4><pre><code class="javascript">function test(){
+    console.log(&quot;Hello world!&quot;);
+}
+
+(function(){
+    var box = function(){
+        return box.fn.init();
+    };
+
+    box.prototype = box.fn = {
+        init : function(){
+            console.log(&#39;box.init()&#39;);
+
+            return this;
+        },
+
+        add : function(str){
+            alert(&quot;add&quot;, str);
+
+            return this;
+        },
+
+        remove : function(str){
+            alert(&quot;remove&quot;, str);
+
+            return this;
+        }
+    };
+
+    box.fn.init.prototype = box.fn;
+
+    window.box =box;
+})();
+
+var testBox = box();
+testBox.add(&quot;jQuery&quot;).remove(&quot;jQuery&quot;);
+</code></pre>
+<h4 id="HTML代码-HTML-codes"><a href="#HTML代码-HTML-codes" class="headerlink" title="HTML代码 HTML codes"></a>HTML代码 HTML codes</h4><pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;mate charest=&quot;utf-8&quot; /&gt;
+        &lt;title&gt;Hello world!&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;Hello world!&lt;/h1&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="图片-Images"><a href="#图片-Images" class="headerlink" title="图片 Images"></a>图片 Images</h3><p>Image:</p>
+<p><img src="https://pandao.github.io/editor.md/examples/images/4.jpg" alt></p>
+<blockquote>
+<p>Follow your heart.</p>
+</blockquote>
+<p><img src="https://pandao.github.io/editor.md/examples/images/8.jpg" alt></p>
+<blockquote>
+<p>图为：厦门白城沙滩</p>
+</blockquote>
+<p>图片加链接 (Image + Link)：</p>
+<p><a href="https://pandao.github.io/editor.md/examples/images/7.jpg" title="李健首张专辑《似水流年》封面" target="_blank" rel="noopener"><img src="https://pandao.github.io/editor.md/examples/images/7.jpg" alt></a></p>
+<blockquote>
+<p>图为：李健首张专辑《似水流年》封面</p>
+</blockquote>
+<hr>
+<h3 id="列表-Lists"><a href="#列表-Lists" class="headerlink" title="列表 Lists"></a>列表 Lists</h3><h4 id="无序列表（减号）Unordered-Lists"><a href="#无序列表（减号）Unordered-Lists" class="headerlink" title="无序列表（减号）Unordered Lists (-)"></a>无序列表（减号）Unordered Lists (-)</h4><ul>
+<li>列表一</li>
+<li>列表二</li>
+<li>列表三</li>
+</ul>
+<h4 id="无序列表（星号）Unordered-Lists"><a href="#无序列表（星号）Unordered-Lists" class="headerlink" title="无序列表（星号）Unordered Lists (*)"></a>无序列表（星号）Unordered Lists (*)</h4><ul>
+<li>列表一</li>
+<li>列表二</li>
+<li>列表三</li>
+</ul>
+<h4 id="无序列表（加号和嵌套）Unordered-Lists"><a href="#无序列表（加号和嵌套）Unordered-Lists" class="headerlink" title="无序列表（加号和嵌套）Unordered Lists (+)"></a>无序列表（加号和嵌套）Unordered Lists (+)</h4><ul>
+<li>列表一</li>
+<li>列表二<ul>
+<li>列表二-1</li>
+<li>列表二-2</li>
+<li>列表二-3</li>
+</ul>
+</li>
+<li>列表三<ul>
+<li>列表一</li>
+<li>列表二</li>
+<li>列表三</li>
+</ul>
+</li>
+</ul>
+<h4 id="有序列表-Ordered-Lists"><a href="#有序列表-Ordered-Lists" class="headerlink" title="有序列表 Ordered Lists (-)"></a>有序列表 Ordered Lists (-)</h4><ol>
+<li>第一行</li>
+<li>第二行</li>
+<li>第三行</li>
+</ol>
+<h4 id="GFM-task-list"><a href="#GFM-task-list" class="headerlink" title="GFM task list"></a>GFM task list</h4><ul>
+<li style="list-style: none"><input type="checkbox" checked> GFM task list 1</li>
+<li style="list-style: none"><input type="checkbox" checked> GFM task list 2</li>
+<li style="list-style: none"><input type="checkbox"> GFM task list 3<ul>
+<li style="list-style: none"><input type="checkbox"> GFM task list 3-1</li>
+<li style="list-style: none"><input type="checkbox"> GFM task list 3-2</li>
+<li style="list-style: none"><input type="checkbox"> GFM task list 3-3</li>
+</ul>
+</li>
+<li style="list-style: none"><input type="checkbox"> GFM task list 4<ul>
+<li style="list-style: none"><input type="checkbox"> GFM task list 4-1</li>
+<li style="list-style: none"><input type="checkbox"> GFM task list 4-2</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="绘制表格-Tables"><a href="#绘制表格-Tables" class="headerlink" title="绘制表格 Tables"></a>绘制表格 Tables</h3><table>
+<thead>
+<tr>
+<th>项目</th>
+<th style="text-align:right">价格</th>
+<th style="text-align:center">数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>计算机</td>
+<td style="text-align:right">$1600</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td>手机</td>
+<td style="text-align:right">$12</td>
+<td style="text-align:center">12</td>
+</tr>
+<tr>
+<td>管线</td>
+<td style="text-align:right">$1</td>
+<td style="text-align:center">234</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell </td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>First Header</th>
+<th>Second Header</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+<tr>
+<td>Content Cell</td>
+<td>Content Cell</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Function name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>help()</code></td>
+<td>Display the help window.</td>
+</tr>
+<tr>
+<td><code>destroy()</code></td>
+<td><strong>Destroy your computer!</strong></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Left-Aligned</th>
+<th style="text-align:center">Center Aligned</th>
+<th style="text-align:right">Right Aligned</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">col 3 is</td>
+<td style="text-align:center">some wordy text</td>
+<td style="text-align:right">$1600</td>
+</tr>
+<tr>
+<td style="text-align:left">col 2 is</td>
+<td style="text-align:center">centered</td>
+<td style="text-align:right">$12</td>
+</tr>
+<tr>
+<td style="text-align:left">zebra stripes</td>
+<td style="text-align:center">are neat</td>
+<td style="text-align:right">$1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th style="text-align:right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Computer</td>
+<td style="text-align:right">$1600</td>
+</tr>
+<tr>
+<td>Phone</td>
+<td style="text-align:right">$12</td>
+</tr>
+<tr>
+<td>Pipe</td>
+<td style="text-align:right">$1</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h4 id="特殊符号-HTML-Entities-Codes"><a href="#特殊符号-HTML-Entities-Codes" class="headerlink" title="特殊符号 HTML Entities Codes"></a>特殊符号 HTML Entities Codes</h4><p>&copy; &amp;  &uml; &trade; &iexcl; &pound;<br>&amp; &lt; &gt; &yen; &euro; &reg; &plusmn; &para; &sect; &brvbar; &macr; &laquo; &middot; </p>
+<p>X&sup2; Y&sup3; &frac34; &frac14;  &times;  &divide;   &raquo;</p>
+<p>18&ordm;C  &quot;  &apos;</p>
+<p>*literal asterisks*</p>
+<h3 id="End"><a href="#End" class="headerlink" title="End"></a>End</h3> -->
+        <h3 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h3><ul>
+<li>支持“标准”Markdown / CommonMark和Github风格的语法，也可变身为代码编辑器；</li>
+<li>支持实时预览、图片（跨域）上传、预格式文本/代码/表格插入、代码折叠、搜索替换、只读模式、自定义样式主题和多语言语法高亮等功能；</li>
+<li>支持ToC（Table of Contents）、Emoji表情、Task lists、@链接等Markdown扩展语法；</li>
+<li>支持TeX科学公式（基于KaTeX）、流程图 Flowchart 和 时序图 Sequence Diagram;</li>
+<li>支持识别和解析HTML标签，并且支持自定义过滤标签解析，具有可靠的安全性和几乎无限的扩展性；</li>
+<li>支持 AMD / CMD 模块化加载（支持 Require.js &amp; Sea.js），并且支持自定义扩展插件；</li>
+<li>兼容主流的浏览器（IE8+）和Zepto.js，且支持iPad等平板设备；</li>
+<li>支持自定义主题样式；</li>
+</ul>
+      </div>
+    </article>
+  
+    <article class="post">
+      <h4>
+        <a class="post-title-link" href="/20190329/hello-world/">
+            Hello World
+        </a>
+      </h4>
+        <div class="post-meta text-secondly">
+            
+          <span class="post-time">2019-03-29</span>
+        </div>
+      <div class="post-content fmt">
+        <!-- <p><canvas id="canvas354879" border="1">noooo~</canvas></p>
+<p><label>dashLong<input value="8" id="dashLong" name="dashLong" type="range" min="1" max="100" step="1"></label></p>
+<p><label>dashSpacing<input value="4" id="dashSpacing" name="dashSpacing" type="range" min="1" max="100" step="1"></label></p>
+<p><label>speed<input value="16" id="speed" name="speed" type="range" min="1" max="1000" step="1"></label></p>
+<script>
+window.addEventListener('load', function(ev) {
+    var canvas = document.querySelector('#canvas354879');
+    var ctx = canvas.getContext('2d');
+    var width = 200, lineWidth = 3;
+    canvas.height = canvas.width = width + lineWidth;
+    var dashLong = 8, dashSpacing = 4, dashOffset = 0, speed = 16;
+
+    var dlon = document.querySelector("#dashLong");
+    var dspc = document.querySelector("#dashSpacing");
+    var dspe = document.querySelector("#speed");
+
+    dlon.addEventListener('input', update, false);
+    dspc.addEventListener('input', update, false);
+    dspe.addEventListener('input', update, false);
+
+    function update() {
+        dashLong = dlon.value;
+        dashSpacing = dspc.value;
+        speed = dspe.value;
+    }
+
+    console.log('Hello World');
+
+    (function draw() {
+        dashOffset++;
+        if( dashOffset >= dashLong + dashSpacing){
+            dashOffset = 0;
+        }
+        ctx.setLineDash([dashLong, dashSpacing]);
+        ctx.clearRect( 0, 0, canvas.width, canvas.height);
+        ctx.lineDashOffset = -dashOffset;
+        ctx.lineWidth = lineWidth;
+        ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);
+        setTimeout(draw, 1000/speed);
+    })();
+}, false);
+</script>
+
+
+<a id="more"></a>
+<h2 id="yee"><a href="#yee" class="headerlink" title="yee~"></a>yee~</h2><pre><code>(function draw() {
+    dashOffset++;
+    if( dashOffset &gt;= dashLong + dashSpacing){
+        dashOffset = 0;
+    }
+    ctx.setLineDash([dashLong, dashSpacing]);
+    ctx.clearRect( 0, 0, canvas.width, canvas.height);
+    ctx.lineDashOffset = -dashOffset;
+    ctx.lineWidth = lineWidth;
+    ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);
+    setTimeout(draw, 1000/speed);
+})();
+</code></pre> -->
+        <p><canvas id="canvas354879" border="1">noooo~</canvas></p>
+<p><label>dashLong<input value="8" id="dashLong" name="dashLong" type="range" min="1" max="100" step="1"></label></p>
+<p><label>dashSpacing<input value="4" id="dashSpacing" name="dashSpacing" type="range" min="1" max="100" step="1"></label></p>
+<p><label>speed<input value="16" id="speed" name="speed" type="range" min="1" max="1000" step="1"></label></p>
+<script>
+window.addEventListener('load', function(ev) {
+    var canvas = document.querySelector('#canvas354879');
+    var ctx = canvas.getContext('2d');
+    var width = 200, lineWidth = 3;
+    canvas.height = canvas.width = width + lineWidth;
+    var dashLong = 8, dashSpacing = 4, dashOffset = 0, speed = 16;
+
+    var dlon = document.querySelector("#dashLong");
+    var dspc = document.querySelector("#dashSpacing");
+    var dspe = document.querySelector("#speed");
+
+    dlon.addEventListener('input', update, false);
+    dspc.addEventListener('input', update, false);
+    dspe.addEventListener('input', update, false);
+
+    function update() {
+        dashLong = dlon.value;
+        dashSpacing = dspc.value;
+        speed = dspe.value;
+    }
+
+    console.log('Hello World');
+
+    (function draw() {
+        dashOffset++;
+        if( dashOffset >= dashLong + dashSpacing){
+            dashOffset = 0;
+        }
+        ctx.setLineDash([dashLong, dashSpacing]);
+        ctx.clearRect( 0, 0, canvas.width, canvas.height);
+        ctx.lineDashOffset = -dashOffset;
+        ctx.lineWidth = lineWidth;
+        ctx.strokeRect(lineWidth/2, lineWidth/2, width, width);
+        setTimeout(draw, 1000/speed);
+    })();
+}, false);
+</script>
+      </div>
+    </article>
+  
+</section>
+
+
+<style>
+    .ad {
+        position: fixed;
+        bottom: 0;
+        right: 15px;
+        border-radius: 4px 4px 0 0;
+        width: 150px;
+        max-width: 50%;
+        max-height: 50%;
+        border-top: 5px solid;
+        border-left: 5px solid;
+        border-right: 5px solid;
+        animation-duration: .5s;
+        animation-name: ad-border;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        transform: translateY(0%);
+    }
+    .ad.hide{
+        transform: translateY(110%);
+    }
+
+    .ad .btn-close {
+        position: absolute;
+        top: -1.5em;
+        right: 0;
+        background: transparent;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        text-shadow: 0 0 5px #fff;
+    }
+
+    .ad .btn-close:hover {
+        color: red;
+        text-shadow: 0 0 5px #0005;
+        font-weight: bold;
+        opacity: .8;
+    }
+
+    @keyframes ad-border {
+        0% {
+            border-color: #F44336;
+        }
+        17% {
+            border-color: #FF9800;
+        }
+        34% {
+            border-color: #FFEB3B;
+        }
+        51% {
+            border-color: #4CAF50;
+        }
+        68% {
+            border-color: #2196F3;
+        }
+        85% {
+            border-color: #3F51B5;
+        }
+        100% {
+            border-color: #9C27B0;
+        }
+    }
+</style>
+<section class="ad hide">
+    <button class="btn-close">X</button>
+    <img draggable="false" src="/img/emotion1.gif" alt="ad" width="100%">
+    <script>
+      (function () {
+        document.querySelectorAll('.btn-close').forEach(function (t) {
+          t.addEventListener('click', function (ev) {
+                this.parentElement.classList.add('hide');
+          }, false);
+        });
+        var stop;
+        var refresh = 30;
+        function show(ms) {
+          clearTimeout(stop);
+          stop = setTimeout(function (ev) {
+            document.querySelectorAll('.ad').forEach(function (t) {
+              t.classList.remove('hide');
+            });
+            show(Math.random() * refresh * 1000 + 1000);
+          }, ms);
+        }
+        show(Math.random() * refresh * 1000 + 1000);
+      })();
+    </script>
+</section>
+
+
+<!-- 分页设置 -->
+
+
+
+    </main>
+  </body>
 </html>
