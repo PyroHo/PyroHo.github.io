@@ -44,11 +44,11 @@
         </li>
       
         <li class="menu-item">
-          <a href="https://steamcommunity.com/profiles/76561198376589719/" class="menu-item-link">Menu.Steam</a>
+          <a href="https://steamcommunity.com/profiles/76561198376589719" class="menu-item-link">Steam</a>
         </li>
       
         <li class="menu-item">
-          <a href="/profile.html" class="menu-item-link">Menu.CV</a>
+          <a href="/profile.html" class="menu-item-link">CV</a>
         </li>
       
     </ul>
@@ -69,13 +69,15 @@
       
 <article class="post">
   <div class="post-title">
-    <h2 class="title"></h2>
+    <h2 class="title">MQ 消息队列有什么优缺点</h2>
   </div>
    <div class="post-meta">
     <span class="post-time">2019-04-15</span>
   </div>
   <div class="post-content fmt">
-    <h2 id="MQ-消息队列有什么优缺点"><a href="#MQ-消息队列有什么优缺点" class="headerlink" title="MQ 消息队列有什么优缺点"></a>MQ 消息队列有什么优缺点</h2><p>消息队列有什么优缺点优点上面已经说了，就是在特殊场景下有其对应的好处，<strong>解耦</strong>、<br><strong>异步</strong>、<strong>削峰</strong>。</p>
+    <p>吧啦吧啦记录一下</p>
+<a id="more"></a>
+<p>消息队列有什么优缺点上面已经说了，就是在特殊场景下有其对应的好处，<strong>解耦</strong>、<br><strong>异步</strong>、<strong>削峰</strong>。</p>
 <p>缺点有以下几个：</p>
 <ol>
 <li><strong>系统可用性降低</strong><br>系统引入的外部依赖越多，越容易挂掉。<br>本来你就是 A 系统调用 BCD 三个系统的接口就好了，人 ABCD 四个系统好好的，没<br>啥问题，你偏加个 MQ 进来，万一 MQ 挂了咋整，MQ 一挂，整套系统崩溃的，你不就<br>完了？</li>
